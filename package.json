@@ -1,0 +1,23 @@
+{
+  "name": "dutyify",
+  "version": "1.0.0",
+  "description": "Dutyify: Simplify tasks, boost productivity. Stay organized, get more done.",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamfarghali/dutyify.git"
+  },
+  "author": "Muhammed A. Farghali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iamfarghali/dutyify/issues"
+  },
+  "homepage": "https://github.com/iamfarghali/dutyify#readme",
+  "devDependencies": {
+    "parcel": "^2.12.0"
+  }
+}

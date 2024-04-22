@@ -1,0 +1,16 @@
+# Dependency directories
+node_modules/
+
+# Temp directory
+temp/
+
+# Optional npm cache directory
+.npm
+
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+
+APP_PLANING.md
