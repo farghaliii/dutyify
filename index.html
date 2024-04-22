@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dutyify</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../src/css/style.css">
+  <script type="module" defer src="../src/js/controller.js"></script>
+</head>
+
+<body>
+  <main class="main container">
+    <header class="secondary-header">
+      <div class="primary-heading-box">
+        <h1 class="primary-heading">Task Board</h1>
+        <span class="category">Category Name</span>
+      </div>
+      <nav class="nav">
+        <div class="action-box">
+          <button class="btn btn-filter">
+            <!-- Icon -->
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3.38589 5.66687C2.62955 4.82155 2.25138 4.39889 2.23712 4.03968C2.22473 3.72764 2.35882 3.42772 2.59963 3.22889C2.87684 3 3.44399 3 4.57828 3H19.4212C20.5555 3 21.1227 3 21.3999 3.22889C21.6407 3.42772 21.7748 3.72764 21.7624 4.03968C21.7481 4.39889 21.3699 4.82155 20.6136 5.66687L14.9074 12.0444C14.7566 12.2129 14.6812 12.2972 14.6275 12.3931C14.5798 12.4781 14.5448 12.5697 14.5236 12.6648C14.4997 12.7721 14.4997 12.8852 14.4997 13.1113V18.4584C14.4997 18.6539 14.4997 18.7517 14.4682 18.8363C14.4403 18.911 14.395 18.9779 14.336 19.0315C14.2692 19.0922 14.1784 19.1285 13.9969 19.2012L10.5969 20.5612C10.2293 20.7082 10.0455 20.7817 9.89802 20.751C9.76901 20.7242 9.6558 20.6476 9.583 20.5377C9.49975 20.4122 9.49975 20.2142 9.49975 19.8184V13.1113C9.49975 12.8852 9.49975 12.7721 9.47587 12.6648C9.45469 12.5697 9.41971 12.4781 9.37204 12.3931C9.31828 12.2972 9.2429 12.2129 9.09213 12.0444L3.38589 5.66687Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="btn-text">Filter</span>
+          </button>
+
+          <button class="btn btn-sort">
+            <!-- Icon -->
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 12H18M3 6H21M9 18H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <span class="btn-text">Sort</span>
+          </button>
+
+          <button class="btn btn-add btn-open-modal">
+            <!-- Icon -->
+            <svg class="btn-icon btn-add--icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <span class="btn-text">New Task</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+    <!-- Board -->
+    <section class="board">
+      <!-- To Do -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="secondary-heading">To Do</h2>
+          <span class="tasks-number">5</span>
+        </div>
+        <ul class="card__tasks-container">
+          <li id="task-1" class="task" draggable="true">
+            <span class="task__category">Design</span>
+            <div class="task__details-box">
+              <p class="task__title">Create Email templates for Newsletters</p>
+              <p class="task__description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. adipisicing elit.
+              </p>
+            </div>
+            <div class="task__info">
+              <div class="task__priority-box">
+                <span class="priority__status priority__status--low"></span>
+              </div>
+
+              <div class="task__keywords">
+                <span class="task__keyword">css</span>
+                <span class="task__keyword">web development</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- In Progress -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="secondary-heading">In Progress</h2>
+          <span class="tasks-number">5</span>
+        </div>
+        <ul class="card__tasks-container">
+          <li id="task-4" class="task" draggable="true">
+            <span class="task__category">Design</span>
+            <div class="task__details-box">
+              <p class="task__title">Create Email templates for Newsletters</p>
+              <p class="task__description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. adipisicing elit.
+              </p>
+            </div>
+            <div class="task__info">
+              <div class="task__priority-box">
+                <span class="priority__status priority__status--meduim"></span>
+              </div>
+
+              <div class="task__keywords">
+                <span class="task__keyword">css</span>
+                <span class="task__keyword">web development</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Completed -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="secondary-heading">Completed</h2>
+          <span class="tasks-number">7</span>
+        </div>
+        <ul class="card__tasks-container">
+          <li id="task-2" class="task" draggable="true">
+            <span class="task__category">Design</span>
+            <div class="task__details-box">
+              <p class="task__title">Email templates for Newsletters</p>
+              <p class="task__description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. adipisicing elit.
+              </p>
+            </div>
+            <div class="task__info">
+              <div class="task__priority-box">
+                <span class="priority__status priority__status--meduim"></span>
+              </div>
+
+              <div class="task__keywords">
+                <span class="task__keyword">css</span>
+                <span class="task__keyword">web development</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Outdated -->
+      <div class="card">
+        <div class="card__header">
+          <h2 class="secondary-heading">Outdated</h2>
+          <span class="tasks-number">2</span>
+        </div>
+        <ul class="card__tasks-container">
+          <li id="task-3" class="task" draggable="true">
+            <span class="task__category">Design</span>
+            <div class="task__details-box">
+              <p class="task__title">Develop Email for Newsletters</p>
+              <p class="task__description">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. adipisicing elit.
+              </p>
+            </div>
+            <div class="task__info">
+              <div class="task__priority-box">
+                <span class="priority__status priority__status--meduim"></span>
+              </div>
+
+              <div class="task__keywords">
+                <span class="task__keyword">css</span>
+                <span class="task__keyword">web development</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <!-- Modal -->
+  <section class="modal modal--close">
+    <div class="modal__content">
+      <button type="button" class="btn modal__btn modal__btn--close">X</button>
+      <div class="modal__content-body"></div>
+    </div>
+  </section>
+</body>
+
+</html>
