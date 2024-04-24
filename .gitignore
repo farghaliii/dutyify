@@ -4,6 +4,9 @@ node_modules/
 # Temp directory
 temp/
 
+# dist directory
+dist/
+
 # Optional npm cache directory
 .npm
 

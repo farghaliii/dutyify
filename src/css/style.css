@@ -152,6 +152,7 @@ body {
 .secondary-heading {
   font-size: inherit;
   font-weight: inherit;
+  text-transform: capitalize;
 }
 
 .card__tasks-container {
@@ -216,7 +217,7 @@ body {
   background-color: #219653;
   color: #f9f9f9;
 }
-.priority__status--meduim {
+.priority__status--medium {
   background-color: #f2c94c;
   color: #222222;
 }
@@ -227,8 +228,8 @@ body {
 .priority__status--low::after {
   content: "Low";
 }
-.priority__status--meduim::after {
-  content: "Meduim";
+.priority__status--medium::after {
+  content: "Medium";
 }
 .priority__status--high::after {
   content: "High";
@@ -260,7 +261,7 @@ body {
 .task--low {
   border-color: #219653;
 }
-.task--meduim {
+.task--medium {
   border-color: #f2c94c;
 }
 .task--high {

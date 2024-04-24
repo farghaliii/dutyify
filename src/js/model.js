@@ -1,0 +1,225 @@
+// import "core-js/stable";
+
+export const state = {
+  tasks: {
+    todo: [
+      {
+        id: 1,
+        title: "Web Development Project",
+        description: "This project involves developing a website.",
+        priority: "high",
+        status: "todo",
+        category: {
+          id: "web-development",
+          name: "Web Development",
+        },
+        dueDate: "Thu. 12/02/2024",
+        keywords: ["css", "html", "js"],
+      },
+      {
+        id: 2,
+        title: "Design Landing Page",
+        description:
+          "Create a visually appealing landing page design. a visually appealing landing page design. a visually appealing landing page design. a visually appealing landing page design.",
+        priority: "medium",
+        status: "todo",
+        category: {
+          id: "design",
+          name: "Design",
+        },
+        dueDate: "Sun. 02/08/2024",
+        keywords: ["figma", "ui"],
+      },
+      {
+        id: 3,
+        title: "Application Enhancement",
+        description: "Enhance the functionality of the Dutyify application.",
+        priority: "low",
+        status: "todo",
+        category: {
+          id: "dutyify-application",
+          name: "Dutyify Application",
+        },
+        dueDate: "Sat. 02/05/2024",
+        keywords: ["js", "apps", "urgent"],
+      },
+      {
+        id: 7,
+        title: "Testing Environment Setup",
+        description: "Set up the testing environment for automated testing.",
+        priority: "low",
+        status: "todo",
+        category: {
+          id: "testing",
+          name: "Testing",
+        },
+        dueDate: "Sat. 05/25/2024",
+        keywords: ["unit-testing", "integration-testing"],
+      },
+      {
+        id: 8,
+        title: "E-commerce Website Design",
+        description:
+          "Design an e-commerce website with user-friendly interfaces.",
+        priority: "medium",
+        status: "todo",
+        category: {
+          id: "web-development",
+          name: "Web Development",
+        },
+        dueDate: "Tue. 06/18/2024",
+        keywords: ["ui", "ux", "ecommerce"],
+      },
+      {
+        id: 13,
+        title: "API Documentation",
+        description: "Create documentation for the APIs.",
+        priority: "low",
+        status: "todo",
+        category: {
+          id: "documentation",
+          name: "Documentation",
+        },
+        dueDate: "Mon. 11/11/2024",
+        keywords: ["api", "documentation"],
+      },
+      {
+        id: 14,
+        title: "SEO Optimization",
+        description: "Optimize the website for better search engine ranking.",
+        priority: "medium",
+        status: "todo",
+        category: {
+          id: "marketing",
+          name: "Marketing",
+        },
+        dueDate: "Tue. 12/03/2024",
+        keywords: ["seo", "search-engine", "optimization"],
+      },
+    ],
+    inProgress: [
+      {
+        id: 4,
+        title: "Mobile App Development",
+        description:
+          "Develop a mobile application for Android and iOS platforms.",
+        priority: "high",
+        status: "in-progress",
+        category: {
+          id: "mobile-development",
+          name: "Mobile Development",
+        },
+        dueDate: "Mon. 01/20/2024",
+        keywords: ["react-native", "flutter", "mobile"],
+      },
+      {
+        id: 5,
+        title: "Graphic Design Project",
+        description: "Create graphics for marketing materials.",
+        priority: "low",
+        status: "in-progress",
+        category: {
+          id: "design",
+          name: "Design",
+        },
+        dueDate: "Wed. 03/15/2024",
+        keywords: ["photoshop", "illustrator"],
+      },
+      {
+        id: 6,
+        title: "Backend API Development",
+        description: "Develop APIs for the backend of the system.",
+        priority: "medium",
+        status: "in-progress",
+        category: {
+          id: "backend-development",
+          name: "Backend Development",
+        },
+        dueDate: "Fri. 04/12/2024",
+        keywords: ["nodejs", "express", "mongodb"],
+      },
+      {
+        id: 9,
+        title: "Database Schema Design",
+        description: "Design the schema for the database.",
+        priority: "high",
+        status: "in-progress",
+        category: {
+          id: "database",
+          name: "Database",
+        },
+        dueDate: "Wed. 07/10/2024",
+        keywords: ["database", "sql", "schema"],
+      },
+    ],
+    completed: [
+      {
+        id: 10,
+        title: "Content Management System Implementation",
+        description: "Implement a CMS for easy content management.",
+        priority: "medium",
+        status: "completed",
+        category: {
+          id: "web-development",
+          name: "Web Development",
+        },
+        dueDate: "Thu. 08/22/2024",
+        keywords: ["wordpress", "drupal", "cms"],
+      },
+      {
+        id: 11,
+        title: "User Interface Refinement",
+        description: "Refine the user interface based on user feedback.",
+        priority: "low",
+        status: "completed",
+        category: {
+          id: "design",
+          name: "Design",
+        },
+        dueDate: "Sat. 09/14/2024",
+        keywords: ["ui", "ux", "feedback"],
+      },
+      {
+        id: 12,
+        title: "Security Audit",
+        description: "Conduct a security audit of the system.",
+        priority: "high",
+        status: "completed",
+        category: {
+          id: "security",
+          name: "Security",
+        },
+        dueDate: "Sun. 10/27/2024",
+        keywords: ["security", "audit"],
+      },
+    ],
+    outdated: [
+      {
+        id: 15,
+        title: "Performance Tuning",
+        description: "Tune the system for better performance.",
+        priority: "high",
+        status: "outdated",
+        category: {
+          id: "performance",
+          name: "Performance",
+        },
+        dueDate: "Wed. 01/15/2025",
+        keywords: ["performance", "tuning"],
+      },
+      {
+        id: 16,
+        title: "Email Newsletter Design",
+        description: "Design an attractive email newsletter template.",
+        priority: "medium",
+        status: "outdated",
+        category: {
+          id: "design",
+          name: "Design",
+        },
+        dueDate: "Thu. 02/27/2025",
+        keywords: ["email", "newsletter", "design"],
+      },
+    ],
+  },
+};

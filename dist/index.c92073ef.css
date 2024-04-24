@@ -137,6 +137,7 @@ body {
 .secondary-heading {
   font-size: inherit;
   font-weight: inherit;
+  text-transform: capitalize;
 }
 
 .card__tasks-container {
@@ -210,7 +211,7 @@ body {
   background-color: #219653;
 }
 
-.priority__status--meduim {
+.priority__status--medium {
   color: #222;
   background-color: #f2c94c;
 }
@@ -224,8 +225,8 @@ body {
   content: "Low";
 }
 
-.priority__status--meduim:after {
-  content: "Meduim";
+.priority__status--medium:after {
+  content: "Medium";
 }
 
 .priority__status--high:after {
@@ -262,7 +263,7 @@ body {
   border-color: #219653;
 }
 
-.task--meduim {
+.task--medium {
   border-color: #f2c94c;
 }
 

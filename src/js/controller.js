@@ -1,6 +1,9 @@
-const tasksBoardEl = document.querySelector(".board");
-const tasksContainersEl = document.querySelectorAll(".card__tasks-container");
+// import "core-js/stable";
 
+import * as model from "./model.js";
+import taskBoardView from "./views/taskBoardView.js";
+
+const tasksBoardEl = document.querySelector(".board");
 function makeDraggable(node) {
   const events = [
     {
@@ -80,8 +83,6 @@ function unHighlightTarget(target) {
     target.parentElement.classList.remove("drag-over");
   }
 }
-makeDraggable(tasksBoardEl);
-tasksContainersEl.forEach((container) => makeDroppable(container));
 
 // Open Task in a modal
 tasksBoardEl.addEventListener("click", function (e) {
@@ -222,3 +223,9 @@ function generateTaskMarkup() {
     </div>
   `;
 }
+
+const tasks = model.state.tasks;
+taskBoardView.render(tasks);
+const tasksContainersEl = document.querySelectorAll(".card__tasks-container");
+makeDraggable(tasksBoardEl);
+tasksContainersEl.forEach((container) => makeDroppable(container));
