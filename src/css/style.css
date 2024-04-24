@@ -102,22 +102,22 @@ body {
   cursor: pointer;
   transition: all 0.2s ease-in;
 }
-.btn-icon {
+.btn__icon {
   width: 2.4rem;
   color: #222222;
 }
-.btn-add {
+.btn--add {
   background-color: #fff;
   color: #a71244;
   border: 0.1rem solid;
   border-radius: 0.2rem;
   padding: 0.8rem 2rem;
 }
-.btn-add--icon {
+.btn__icon--add {
   color: inherit;
   width: 1.4rem;
 }
-.btn-add:hover {
+.btn--add:hover {
   background-color: #a71244;
   color: #fff;
 }
@@ -519,13 +519,13 @@ input#due-date:valid + span::after {
   .action-box {
     gap: 1.2rem;
   }
-  .btn-filter .btn-text,
-  .btn-sort .btn-text {
+  .btn--filter .btn__text,
+  .btn--sort .btn__text {
     display: none;
   }
 }
 @media screen and (max-width: 650px) {
-  .btn-add .btn-text {
+  .btn--add .btn__text {
     display: none;
   }
 }
@@ -536,9 +536,9 @@ input#due-date:valid + span::after {
     gap: 2.4rem;
   }
 
-  .btn-filter .btn-text,
-  .btn-sort .btn-text,
-  .btn-add .btn-text {
+  .btn--filter .btn__text,
+  .btn--sort .btn__text,
+  .btn--add .btn__text {
     display: inline;
   }
 }
@@ -556,10 +556,10 @@ input#due-date:valid + span::after {
   .btn {
     font-size: 1.2rem;
   }
-  .btn-icon {
+  .btn__icon {
     width: 2rem;
   }
-  .btn-add--icon {
+  .btn__icon--add {
     width: 1.2rem;
   }
   .board {
@@ -586,13 +586,13 @@ input#due-date:valid + span::after {
   .btn {
     font-size: 1rem;
   }
-  .btn-add {
+  .btn--add {
     padding: 0.6rem 0.8rem;
   }
-  .btn-icon {
+  .btn__icon {
     width: 1.8rem;
   }
-  .btn-add--icon {
+  .btn__icon--add {
     width: 1rem;
   }
 }
@@ -606,8 +606,8 @@ input#due-date:valid + span::after {
   .category {
     font-size: 1.2rem;
   }
-  .btn-filter .btn-text,
-  .btn-sort .btn-text {
+  .btn--filter .btn__text,
+  .btn--sort .btn__text {
     display: none;
   }
 }

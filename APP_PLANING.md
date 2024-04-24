@@ -116,22 +116,22 @@
       - controller.js _it is a module_
   - index.html
 
-### Design & implement the UI
+### Design & implement the UI ✅
 
 - Tasks Board
 - Add Task Form Compoment
 - Task Preview Component
 
-### Init a new project using `npm init` it will create package.json file
+### Init a new project using `npm init` it will create package.json file ✅
 
-### Install Parcel using `npm i parcel -D`
+### Install Parcel using `npm i parcel -D` ✅
 
-### In package.json add in scripts object these two commands
+### In package.json add in scripts object these two commands ✅
 
 - "start" : "parcel index.html" // To run parcel using `npm run start`
 - "build" : "parcel build index.html" // To build our project after development using `npm run build`
 
-### Install polyfill packages `npm i core.js regenerator-runtime` To support old broswers
+### Install polyfill packages `npm i core.js regenerator-runtime` To support old broswers ✅
 
 ### Start with the business logic
 

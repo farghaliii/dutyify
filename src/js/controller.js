@@ -1,9 +1,6 @@
 const tasksBoardEl = document.querySelector(".board");
 const tasksContainersEl = document.querySelectorAll(".card__tasks-container");
 
-makeDraggable(tasksBoardEl);
-tasksContainersEl.forEach((container) => makeDroppable(container));
-
 function makeDraggable(node) {
   const events = [
     {
@@ -83,6 +80,8 @@ function unHighlightTarget(target) {
     target.parentElement.classList.remove("drag-over");
   }
 }
+makeDraggable(tasksBoardEl);
+tasksContainersEl.forEach((container) => makeDroppable(container));
 
 // Open Task in a modal
 tasksBoardEl.addEventListener("click", function (e) {
@@ -95,8 +94,8 @@ tasksBoardEl.addEventListener("click", function (e) {
 
 // Modal
 const modalEl = document.querySelector(".modal");
-const btnOpenModalEl = document.querySelector(".btn-open-modal");
 const btnCloseModalEl = document.querySelector(".modal__btn--close");
+const btnOpenModalEl = document.querySelector(".btn--open-modal");
 
 modalEl.addEventListener("click", function (e) {
   if (!e.target.classList.contains("modal")) return;

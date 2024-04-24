@@ -84,12 +84,12 @@ body {
   display: flex;
 }
 
-.btn-icon {
+.btn__icon {
   color: #222;
   width: 2.4rem;
 }
 
-.btn-add {
+.btn--add {
   color: #a71244;
   background-color: #fff;
   border: .1rem solid;
@@ -97,12 +97,12 @@ body {
   padding: .8rem 2rem;
 }
 
-.btn-add--icon {
+.btn__icon--add {
   color: inherit;
   width: 1.4rem;
 }
 
-.btn-add:hover {
+.btn--add:hover {
   color: #fff;
   background-color: #a71244;
 }
@@ -541,13 +541,13 @@ input#due-date:invalid + span:after, input#due-date:valid + span:after {
     gap: 1.2rem;
   }
 
-  .btn-filter .btn-text, .btn-sort .btn-text {
+  .btn--filter .btn__text, .btn--sort .btn__text {
     display: none;
   }
 }
 
 @media screen and (width <= 650px) {
-  .btn-add .btn-text {
+  .btn--add .btn__text {
     display: none;
   }
 }
@@ -559,7 +559,7 @@ input#due-date:invalid + span:after, input#due-date:valid + span:after {
     gap: 2.4rem;
   }
 
-  .btn-filter .btn-text, .btn-sort .btn-text, .btn-add .btn-text {
+  .btn--filter .btn__text, .btn--sort .btn__text, .btn--add .btn__text {
     display: inline;
   }
 }
@@ -581,11 +581,11 @@ input#due-date:invalid + span:after, input#due-date:valid + span:after {
     font-size: 1.2rem;
   }
 
-  .btn-icon {
+  .btn__icon {
     width: 2rem;
   }
 
-  .btn-add--icon {
+  .btn__icon--add {
     width: 1.2rem;
   }
 
@@ -617,15 +617,15 @@ input#due-date:invalid + span:after, input#due-date:valid + span:after {
     font-size: 1rem;
   }
 
-  .btn-add {
+  .btn--add {
     padding: .6rem .8rem;
   }
 
-  .btn-icon {
+  .btn__icon {
     width: 1.8rem;
   }
 
-  .btn-add--icon {
+  .btn__icon--add {
     width: 1rem;
   }
 }
@@ -643,7 +643,7 @@ input#due-date:invalid + span:after, input#due-date:valid + span:after {
     font-size: 1.2rem;
   }
 
-  .btn-filter .btn-text, .btn-sort .btn-text {
+  .btn--filter .btn__text, .btn--sort .btn__text {
     display: none;
   }
 }
