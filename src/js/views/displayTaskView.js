@@ -1,12 +1,22 @@
 import "core-js/stable";
 
 class DisplayTaskView {
+  _tasksBoardEl = document.querySelector(".board");
   _parentEl = document.querySelector(".modal__content-body");
   _data;
 
   render(data) {
     this._data = data;
     this._generateMarkup();
+  }
+
+  addHandlerRender(handler) {
+    this._tasksBoardEl.addEventListener("click", function (e) {
+      if (!e.target.closest(".task")) return;
+      const taskId = +e.target.closest(".task").dataset.id;
+      const taskStatus = e.target.closest(".task").dataset.status;
+      handler(taskStatus, taskId);
+    });
   }
 
   _generateMarkup() {

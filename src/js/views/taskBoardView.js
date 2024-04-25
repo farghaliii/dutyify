@@ -1,18 +1,28 @@
 import "core-js/stable";
 
-class TaskBoard {
+import { makeDraggable, makeDroppable } from "../helpers";
+
+class TaskBoardView {
   _parentEl = document.querySelector(".board");
   _todoCardEl = document.querySelector("#todo");
   _outdatedCardEl = document.querySelector("#outdated");
   _inprogressCardEl = document.querySelector("#in-progress");
   _completedCardEl = document.querySelector("#completed");
+  _tasksContainersEl = document.querySelectorAll(".card__tasks-container");
   _data;
+
+  constructor() {
+    makeDraggable(this._parentEl);
+    this._tasksContainersEl.forEach((container) => makeDroppable(container));
+  }
 
   render(data) {
     this._data = data;
-    setTimeout(() => {
-      this._generateMarkup();
-    }, 100);
+    this._generateMarkup();
+  }
+
+  addHandlerRender(handler) {
+    handler();
   }
 
   _generateMarkup() {
@@ -93,4 +103,4 @@ class TaskBoard {
   }
 }
 
-export default new TaskBoard();
+export default new TaskBoardView();
