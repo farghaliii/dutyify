@@ -67,7 +67,9 @@ class TaskBoard {
 
   _generateTaskPreviewCardMarkup(task) {
     return `
-      <li id="${task.id}" class="task" draggable="true">
+      <li id="${task.id}" class="task" draggable="true" data-id="${
+      task.id
+    }" data-status="${task.status}">
         <span class="task__category">${task.category.name}</span>
         <div class="task__details-box">
           <p class="task__title">${task.title}</p>

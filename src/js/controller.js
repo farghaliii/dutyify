@@ -2,6 +2,7 @@ import "core-js/stable";
 
 import * as model from "./model.js";
 import taskBoardView from "./views/taskBoardView.js";
+import displayTaskView from "./views/displayTaskView.js";
 
 const tasksBoardEl = document.querySelector(".board");
 function makeDraggable(node) {
@@ -87,9 +88,11 @@ function unHighlightTarget(target) {
 // Open Task in a modal
 tasksBoardEl.addEventListener("click", function (e) {
   if (!e.target.closest(".task")) return;
-  const b = modalEl.querySelector(".modal__content-body");
-  b.innerHTML = "";
-  b.insertAdjacentHTML("afterbegin", generateTaskMarkup());
+
+  const taskId = +e.target.closest(".task").dataset.id;
+  const taskStatus = e.target.closest(".task").dataset.status;
+  const task = model.state.tasks[taskStatus].find((t) => t.id === taskId);
+  displayTaskView.render(task);
   openModal(modalEl);
 });
 
@@ -185,42 +188,6 @@ function generateAddNewTaskMarkup() {
         <button type="submit" class="btn form__btn form__btn--add">Add</button>
       </div>
     </form>
-  `;
-}
-function generateTaskMarkup() {
-  return `
-    <div class="task task--opened task--meduim">
-      <span class="priority__status priority__status--meduim"></span>
-      <span class="task__category">web development</span>
-
-      <h3 class="task__title">Lorem, ipsum dolor sit amet consectetur adipisicing elit</h3>
-
-      <div class="task--opened__box">
-        <label class="task--opened__label">Description</label>
-        <p class="task__description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam ex totam laborum similique ducimus
-          praesentium commodi eos iusto tempora, suscipit rerum nisi ratione alias sapiente possimus quasi, vitae
-          dolorem voluptatem. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla reprehenderit ipsa
-          commodi quos molestias nobis deserunt distinctio amet. Accusamus quam assumenda laborum quo beatae
-          consequuntur nam sapiente recusandae quia exercitationem! Lorem ipsum dolor sit amet consectetur,
-          adipisicing elit. Rem laudantium, necessitatibus quia quasi natus molestias placeat pariatur blanditiis
-          ex ipsa vitae quaerat temporibus debitis odit ipsam, quos quas excepturi eum.
-        </p>
-      </div>
-
-      <div class="task--opened__box task--opened__box--due-date">
-        <label class="task--opened__label">Due Date</label>
-        <p class="task__due-date">Thu. 12/02/2024</p>
-      </div>
-
-      <div class="task--opened__box">
-        <label class="task--opened__label">Keywords</label>
-        <div class="task__keywords">
-          <span class="task__keyword">css</span>
-          <span class="task__keyword">web development</span>
-        </div>
-      </div>
-    </div>
   `;
 }
 
