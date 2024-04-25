@@ -131,7 +131,7 @@
 - "start" : "parcel index.html" // To run parcel using `npm run start`
 - "build" : "parcel build index.html" // To build our project after development using `npm run build`
 
-### Install polyfill packages `npm i core.js regenerator-runtime` To support old broswers ✅
+### Install polyfill packages `npm i core-js regenerator-runtime` To support old broswers ✅
 
 ### Start with the business logic
 
