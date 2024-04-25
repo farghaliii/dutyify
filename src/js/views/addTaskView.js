@@ -17,10 +17,16 @@ class AddTaskView {
       if (e.key === "n" || e.key === "N") handler();
     });
   }
+  addHandlerSubmit(handler) {
+    document.querySelector(".form--adding").addEventListener("submit", (e) => {
+      e.preventDefault();
+      handler(e);
+    });
+  }
 
   _generateMarkup() {
     const markup = `
-      <form class="form">
+      <form class="form form--adding">
         <div class="form__first-box">
           <div class="form__group form__group--full-col">
             <label for="title">Title</label>

@@ -236,3 +236,5 @@ export const state = {
     ],
   },
 };
+
+export function addNewTask(data) {}
