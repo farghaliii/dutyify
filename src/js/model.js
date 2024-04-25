@@ -1,4 +1,4 @@
-// import "core-js/stable";
+import "core-js/stable";
 
 export const state = {
   tasks: {

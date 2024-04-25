@@ -1,4 +1,4 @@
-// import "core-js/stable";
+import "core-js/stable";
 
 class TaskBoard {
   _parentEl = document.querySelector(".board");

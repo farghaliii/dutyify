@@ -1,4 +1,4 @@
-// import "core-js/stable";
+import "core-js/stable";
 
 import * as model from "./model.js";
 import taskBoardView from "./views/taskBoardView.js";
