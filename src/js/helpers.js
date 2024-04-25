@@ -80,3 +80,13 @@ function unHighlightTarget(target) {
     target.parentElement.classList.remove("drag-over");
   }
 }
+
+// -----------------------------------
+
+export function formDataExtraction(form) {
+  let data = {};
+  new FormData(form).forEach(function (value, key) {
+    data[key] = value;
+  });
+  return data;
+}
