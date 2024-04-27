@@ -1,4 +1,5 @@
 import "core-js/stable";
+import { formDataExtraction } from "../helpers";
 
 class AddTaskView {
   _parentEl = document.querySelector(".modal__content-body");
@@ -10,21 +11,27 @@ class AddTaskView {
     this._generateMarkup();
   }
 
+  clear() {
+    this._parentEl.querySelector(".form--adding").reset();
+  }
+
   addHandlerRender(handler) {
     this._btnAddTaskEl.addEventListener("click", handler);
-    document.addEventListener("keydown", function (e) {
+    document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") handler(e);
-      if (e.key === "n" || e.key === "N") handler();
+      if (e.key === "n" && !this._isAnyInputOrTextareFocused()) handler();
     });
   }
+
   addHandlerSubmit(handler) {
     document.querySelector(".form--adding").addEventListener("submit", (e) => {
       e.preventDefault();
-      handler(e);
+      handler(formDataExtraction(e.target));
     });
   }
 
   _generateMarkup() {
+    const todayDate = new Date().toISOString().split("T")[0];
     const markup = `
       <form class="form form--adding">
         <div class="form__first-box">
@@ -50,11 +57,11 @@ class AddTaskView {
           </div>
 
           <div class="form__group">
-            <label for="category">Category</label>
+            <label for="category">Category / Project</label>
             <select name="category" id="category">
-              <option value="personal">Personal</option>
-              <option value="design">Design</option>
-              <option value="web-development">Web Development</option>
+              ${this._data
+                .map((cat) => `<option value="${cat.id}">${cat.name}</option>`)
+                .join("")}
             </select>
           </div>
 
@@ -69,7 +76,7 @@ class AddTaskView {
 
           <div class="form__group">
             <label for="due-date">Due Date</label>
-            <input type="date" value="2024-04-21" min="2024-04-21" name="due-date" id="due-date">
+            <input type="date" value="${todayDate}" min="${todayDate}" name="due-date" id="due-date">
             <span class="feedback-message">Only<span class="highlighted">future</span> dates.</span>
           </div>
         </div>
@@ -81,6 +88,14 @@ class AddTaskView {
     `;
     this._parentEl.innerHTML = "";
     this._parentEl.insertAdjacentHTML("afterbegin", markup);
+  }
+
+  _isAnyInputOrTextareFocused() {
+    const focusedElement = document.activeElement;
+    return (
+      focusedElement.tagName === "INPUT" ||
+      focusedElement.tagName === "TEXTAREA"
+    );
   }
 }
 
