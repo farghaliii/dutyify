@@ -90,3 +90,10 @@ export function formDataExtraction(form) {
   });
   return data;
 }
+
+// Generate random id with maximum length 11
+export function randomId(length = 6) {
+  return Math.random()
+    .toString(36)
+    .substring(2, length + 2);
+}
