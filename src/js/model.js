@@ -1,4 +1,5 @@
 import "core-js/stable";
+import { randomId } from "./helpers";
 
 export const state = {
   tasks: {
@@ -235,6 +236,49 @@ export const state = {
       },
     ],
   },
+
+  categories: [
+    { id: "general", name: "general" },
+    { id: "web-development", name: "web development" },
+    { id: "dutyify-application", name: "dutyify application" },
+  ],
 };
 
-export function addNewTask(data) {}
+export function addNewTask(data) {
+  const task = {
+    id: generateTaskId(),
+    title: data.title,
+    description: data.description,
+    priority: data["priority-level"],
+    status: "todo",
+    dueDate: data["due-date"],
+    keywords: getTaskKeywords(data.keywords),
+    category: {
+      id: data.category,
+      name: data.category.replace(/[-]/g, " "),
+    },
+  };
+
+  state.tasks[task.status].push(task);
+}
+
+function generateTaskId() {
+  // Generate random id consists of 6 chrachters
+  return randomId(6);
+}
+function getTaskKeywords(str) {
+  const arr = str.trim("").split(",");
+  const arr2 = [];
+  let i = 0;
+  // Maximum 3 Keyword
+  while (i <= 2 && i < arr.length) {
+    const k = arr[i].replace(/^'+|'+$/g, "").trim("");
+    if (k == "") {
+      arr.splice(i, 1);
+      continue;
+    }
+    arr2.push(k);
+    i++;
+  }
+  return arr2;
+}
