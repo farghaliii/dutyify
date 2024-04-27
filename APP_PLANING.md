@@ -167,11 +167,30 @@ the default behavior in these two events (**dragenter** and **dragover**) by usi
 
 - **Drop within Task Element**
 
-  - Issue: Each _card_ has _task_ divs containing text and details. I want users to be able to drop items onto the **board (cards)**, but currently, they can also drop them within individual tasks, which isn't the intended behavior.
+  - **Issue**: Each _card_ has _task_ divs containing text and details. I want users to be able to drop items onto the **board (cards)**, but currently, they can also drop them within individual tasks, which isn't the intended behavior.
 
-  - Solution: Using conditions to determine the specific element
+  - **Solution**: Using conditions to determine the specific element
 
 #### Resources
 
 1. [Javascript drag and drop](https://www.javascripttutorial.net/web-apis/javascript-drag-and-drop/)
 2. [Josestg: todo app](https://github.com/josestg/todo-app/)
+
+### Misc Problems
+
+- **Shortcut key functionality**
+
+  - **Issue**: When I tried to implement a shortcut key functionality to open the task form quickly, I had a problem. The shortcut key I chose was 'n'. But whenever I tried to type a word with the letter 'n', the form opened again.
+
+  - **Solution**: I implemented a function called isAnyInputOrTextareFocused that check if there is any input or textarea element focused,
+    If there is then prevent the shortcut behaviour
+
+    ```JS
+      isAnyInputOrTextareFocused() {
+        const focusedElement = document.activeElement;
+        return (
+          focusedElement.tagName === "INPUT" ||
+          focusedElement.tagName === "TEXTAREA"
+        );
+      }
+    ```
