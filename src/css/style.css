@@ -318,7 +318,7 @@ body {
   font-size: 1.6rem;
   line-height: 2.2rem;
   color: #444;
-  font-weight: 700;
+  font-weight: 600;
 }
 .task--opened .task__keywords {
   gap: 2rem;
@@ -423,6 +423,9 @@ body {
 }
 .form__group textarea {
   resize: none;
+}
+.form__group select {
+  text-transform: capitalize;
 }
 
 input#due-date:invalid + span::after {
