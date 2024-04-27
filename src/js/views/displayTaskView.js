@@ -13,7 +13,7 @@ class DisplayTaskView {
   addHandlerRender(handler) {
     this._tasksBoardEl.addEventListener("click", function (e) {
       if (!e.target.closest(".task")) return;
-      const taskId = +e.target.closest(".task").dataset.id;
+      const taskId = e.target.closest(".task").dataset.id;
       const taskStatus = e.target.closest(".task").dataset.status;
       handler(taskStatus, taskId);
     });
@@ -38,7 +38,9 @@ class DisplayTaskView {
 
         <div class="task--opened__box task--opened__box--due-date">
           <label class="task--opened__label">Due Date</label>
-          <p class="task__due-date">${this._data.dueDate}</p>
+          <p class="task__due-date">${new Date(
+            this._data.dueDate
+          ).toDateString()}</p>
         </div>
 
         <div class="task--opened__box">
