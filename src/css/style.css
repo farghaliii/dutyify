@@ -331,24 +331,37 @@ body {
 }
 
 .task--opened .task__actions {
+  display: flex;
+  gap: 0.8rem;
+  flex-direction: row;
   position: absolute;
   bottom: 1rem;
   right: 0rem;
   padding: 0.8rem 1.6rem;
 }
-.task--opened .task__delete-action {
-  display: flex;
+.task--opened .btn--delete-action,
+.task--opened .btn--edit-action {
+  border: 0.1rem solid;
+  padding: 0.8rem 2rem;
+  border-radius: 0.4rem;
+  transition: transform 0.3s ease;
 }
+
 .task--opened .btn--delete-action {
   background-color: #e92015;
   color: #fff;
-  border: 0.1rem solid;
-  padding: 0.8rem 2rem;
-  transition: transform 0.3s ease;
 }
 .task--opened .btn--delete-action:hover {
   background-color: #fff;
   color: #e92015;
+}
+.task--opened .btn--edit-action {
+  background-color: #2715e9;
+  color: #fff;
+}
+.task--opened .btn--edit-action:hover {
+  background-color: #fff;
+  color: #2715e9;
 }
 
 .task--opened .delete-action__confirmation {
@@ -516,6 +529,16 @@ input#due-date:valid + span::after {
 .form__btn--add:hover {
   background-color: #fff;
   color: #a71244;
+}
+
+.form__btn--edit {
+  background-color: #3a12a7;
+  color: #fff;
+  border: 0.1rem solid;
+}
+.form__btn--edit:hover {
+  background-color: #fff;
+  color: #3a12a7;
 }
 /*----------------*/
 

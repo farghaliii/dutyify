@@ -26,13 +26,16 @@ class DisplayTaskView {
       const targetEl = e.target;
 
       if (
+        !targetEl.classList.contains("btn--edit-action") &&
         !targetEl.classList.contains("btn--delete-action") &&
         !targetEl.classList.contains("btn--delete-canceled") &&
         !targetEl.classList.contains("btn--delete-confirmed")
       )
         return;
 
-      this._deletionHandler(targetEl, taskActionsBoxEl, actions.delete);
+      targetEl.classList.contains("btn--edit-action")
+        ? this._editingHandler(e, actions.edit)
+        : this._deletionHandler(targetEl, taskActionsBoxEl, actions.delete);
     });
   }
 
@@ -58,6 +61,10 @@ class DisplayTaskView {
     // Deletion - Confirmed so delete the task
     if (btn.classList.contains("btn--delete-confirmed"))
       action.handler(action.task);
+  }
+
+  _editingHandler(e, action) {
+    action.handler(e, action.task);
   }
 
   _generateMarkup() {
@@ -92,6 +99,9 @@ class DisplayTaskView {
           </div>
         </div>
         <div class="task--opened__box task__actions">
+          <div class="task__edit-action">
+            <button class="btn btn--edit-action">Edit</button>
+          </div>
           <div class="task__delete-action">
             <button class="btn btn--delete-action">Delete</button>
             <div class="delete-action__confirmation hidden">

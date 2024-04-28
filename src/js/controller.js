@@ -4,6 +4,7 @@ import * as model from "./model.js";
 import taskBoardView from "./views/taskBoardView.js";
 import displayTaskView from "./views/displayTaskView.js";
 import addTaskView from "./views/addTaskView.js";
+import editTaskView from "./views/editTaskView.js";
 import modalView from "./views/modalView.js";
 
 // Control displaying all tasks
@@ -22,6 +23,10 @@ const displayTask = function (taskStatus, taskId) {
     delete: {
       task: { id: taskId, status: task.status },
       handler: deleteTask,
+    },
+    edit: {
+      task,
+      handler: displayEditTask,
     },
   });
 
@@ -64,6 +69,33 @@ const deleteTask = function (task) {
   displayTasks();
 
   // Close the modal
+  modalView.closeModal();
+};
+
+// Control displaying 'Edit Task Form'
+const displayEditTask = function (e, task) {
+  const data = {
+    task: task,
+    categories: model.state.categories,
+  };
+
+  // Rendering the form
+  editTaskView.render(data);
+
+  // Attach submit event listener
+  editTaskView.addHandlerSubmit(updateTask);
+
+  // Open the modal to display it
+  modalView.openModal();
+};
+
+// Control edit a task
+const updateTask = function (data) {
+  model.updateTask(data);
+
+  // Re-render the tasks board
+  displayTasks();
+
   modalView.closeModal();
 };
 
