@@ -330,6 +330,53 @@ body {
   padding: 0.4rem 1.6rem;
 }
 
+.task--opened .task__actions {
+  position: absolute;
+  bottom: 1rem;
+  right: 0rem;
+  padding: 0.8rem 1.6rem;
+}
+.task--opened .task__delete-action {
+  display: flex;
+}
+.task--opened .btn--delete-action {
+  background-color: #e92015;
+  color: #fff;
+  border: 0.1rem solid;
+  padding: 0.8rem 2rem;
+  transition: transform 0.3s ease;
+}
+.task--opened .btn--delete-action:hover {
+  background-color: #fff;
+  color: #e92015;
+}
+
+.task--opened .delete-action__confirmation {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #222;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  transition: transform 0.3s ease-in;
+}
+.task--opened .delete-action__confirmation p {
+  border-bottom: 0.1rem solid #e92015;
+}
+.task--opened .delete-action__confirmation .btn {
+  border: 0.1rem solid #bfbfbf;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.2rem;
+}
+.task--opened .delete-action__confirmation .btn--delete-confirmed {
+  background-color: #222;
+  color: #fff;
+}
+.task--opened .delete-action__confirmation .btn--delete-canceled {
+  background-color: #fff;
+  color: #222;
+}
+
 /* Modal and Form */
 .modal {
   position: fixed;
@@ -479,6 +526,16 @@ input#due-date:valid + span::after {
   border: 0.1rem solid #fafafa;
   background-color: #ececec;
   border-radius: 0.8rem;
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  transform: translateX(100%);
 }
 /* ---------- */
 

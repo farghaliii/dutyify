@@ -19,11 +19,51 @@ class DisplayTaskView {
     });
   }
 
+  addHandlerTaskActions(actions) {
+    const taskActionsBoxEl = this._parentEl.querySelector(".task__actions");
+
+    taskActionsBoxEl.addEventListener("click", (e) => {
+      const targetEl = e.target;
+
+      if (
+        !targetEl.classList.contains("btn--delete-action") &&
+        !targetEl.classList.contains("btn--delete-canceled") &&
+        !targetEl.classList.contains("btn--delete-confirmed")
+      )
+        return;
+
+      this._deletionHandler(targetEl, taskActionsBoxEl, actions.delete);
+    });
+  }
+
+  _deletionHandler(btn, actionsBoxEl, action) {
+    // Deletion - Display the confirmation message
+    if (btn.classList.contains("btn--delete-action")) {
+      const confirmtionBoxEl = btn.nextElementSibling;
+      btn.classList.add("hidden");
+      confirmtionBoxEl.classList.remove("hidden");
+    }
+
+    // Deletion - Canceled
+    if (btn.classList.contains("btn--delete-canceled")) {
+      actionsBoxEl
+        .querySelector(".btn--delete-action")
+        .classList.remove("hidden");
+
+      actionsBoxEl
+        .querySelector(".delete-action__confirmation")
+        .classList.add("hidden");
+    }
+
+    // Deletion - Confirmed so delete the task
+    if (btn.classList.contains("btn--delete-confirmed"))
+      action.handler(action.task);
+  }
+
   _generateMarkup() {
     const markup = `
-      <div class="task task--opened task--${this._data.priority}" data-id=${
-      this._data.id
-    }>
+      <div class="task task--opened task--${this._data.priority}" 
+          data-id=${this._data.id}>
         <span class="priority__status priority__status--${
           this._data.priority
         }"></span>
@@ -49,6 +89,16 @@ class DisplayTaskView {
             ${this._data.keywords
               .map((k) => `<span class="task__keyword">${k}</span>`)
               .join("")}
+          </div>
+        </div>
+        <div class="task--opened__box task__actions">
+          <div class="task__delete-action">
+            <button class="btn btn--delete-action">Delete</button>
+            <div class="delete-action__confirmation hidden">
+                <p>You'll delete this task! Are you sure?</p>
+                <button class="btn btn--delete-confirmed">Yes</button>
+                <button class="btn btn--delete-canceled">No</button>
+            </div>
           </div>
         </div>
       </div>

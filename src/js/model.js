@@ -262,6 +262,11 @@ export function addNewTask(data) {
   state.tasks[task.status].push(task);
 }
 
+export function deleteTask(task) {
+  const taskIndex = state.tasks[task.status].findIndex((t) => t.id == task.id);
+  state.tasks[task.status].splice(taskIndex, 1);
+}
+
 function generateTaskId() {
   // Generate random id consists of 6 chrachters
   return randomId(6);

@@ -16,6 +16,15 @@ const displayTasks = function () {
 const displayTask = function (taskStatus, taskId) {
   const task = model.state.tasks[taskStatus].find((t) => t.id == taskId);
   displayTaskView.render(task);
+
+  // Attach actions event listeners
+  displayTaskView.addHandlerTaskActions({
+    delete: {
+      task: { id: taskId, status: task.status },
+      handler: deleteTask,
+    },
+  });
+
   modalView.openModal();
 };
 
@@ -44,6 +53,18 @@ const addTask = function (data) {
 
   // Re-render the tasks board
   displayTasks();
+};
+
+// Control delete a task
+const deleteTask = function (task) {
+  // Delete the task
+  model.deleteTask(task);
+
+  // Re-render the tasks board
+  displayTasks();
+
+  // Close the modal
+  modalView.closeModal();
 };
 
 // Event Handlers
