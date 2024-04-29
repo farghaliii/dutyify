@@ -106,9 +106,6 @@ class EditTaskView {
               <option value="completed" ${
                 this._data.task.status == "completed" ? "selected" : ""
               }>Completed</option>
-              <option value="outdated" ${
-                this._data.task.status == "outdated" ? "selected" : ""
-              }>Outdated</option>
             </select>
           </div>
 
