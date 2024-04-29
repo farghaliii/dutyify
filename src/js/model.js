@@ -276,17 +276,18 @@ export function updateTask(task) {
     name: task.category.replace(/[-]/g, " "),
   };
 
-  // TODO | Create a function that's responsable for updating the task status
   if (task.oldStatus != task.status) {
-    // Remove it from the old status array
-    const taskIndex = state.tasks[task.oldStatus].findIndex(
-      (t) => t.id == task.id
-    );
-    state.tasks[task.oldStatus].splice(taskIndex, 1);
-
-    // Add it to the current status arry
-    state.tasks[task.status].push(currentTask);
+    updateTaskStatus(currentTask, task.status, task.oldStatus);
   }
+}
+
+export function updateTaskStatus(task, newStatus, oldStatus) {
+  // Remove the task from the old status array
+  const taskIndex = state.tasks[oldStatus].findIndex((t) => t.id == task.id);
+  state.tasks[oldStatus].splice(taskIndex, 1);
+
+  // Add it to the current status arry
+  state.tasks[newStatus].push(task);
 }
 
 export function deleteTask(task) {
