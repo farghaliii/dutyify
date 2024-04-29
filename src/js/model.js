@@ -277,17 +277,23 @@ export function updateTask(task) {
   };
 
   if (task.oldStatus != task.status) {
-    updateTaskStatus(currentTask, task.status, task.oldStatus);
+    updateTaskStatus(currentTask, task.oldStatus, task.status);
   }
 }
 
-export function updateTaskStatus(task, newStatus, oldStatus) {
+export function updateTaskStatus(task, fromStatus, toStatus) {
+  // In case task is the task id get the task and update its status
+  if (typeof task !== "object") {
+    task = state.tasks[fromStatus].find((t) => t.id == task);
+    task.status = toStatus;
+  }
+
   // Remove the task from the old status array
-  const taskIndex = state.tasks[oldStatus].findIndex((t) => t.id == task.id);
-  state.tasks[oldStatus].splice(taskIndex, 1);
+  const taskIndex = state.tasks[fromStatus].findIndex((t) => t.id == task.id);
+  state.tasks[fromStatus].splice(taskIndex, 1);
 
   // Add it to the current status arry
-  state.tasks[newStatus].push(task);
+  state.tasks[toStatus].push(task);
 }
 
 export function deleteTask(task) {

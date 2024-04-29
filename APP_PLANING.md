@@ -194,3 +194,9 @@ the default behavior in these two events (**dragenter** and **dragover**) by usi
         );
       }
     ```
+
+- **Update task status**
+
+  - **Issue**: When a task is moved from one status (e.g., "todo") to another (e.g., "completed") within a draggable and droppable area, I need to send essential data about the task, including its ID, status, and the new status to update the state.
+
+  - **Solution**: I created a custom event named "taskStatusChanged". This event will encapsulate the necessary data, Upon triggering the event, listeners can access this data and perform any required actions.

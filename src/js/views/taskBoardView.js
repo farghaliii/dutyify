@@ -6,14 +6,16 @@ class TaskBoardView {
   _parentEl = document.querySelector(".board");
   _todoCardEl = document.querySelector("#todo");
   _outdatedCardEl = document.querySelector("#outdated");
-  _inprogressCardEl = document.querySelector("#in-progress");
+  _inprogressCardEl = document.querySelector("#inProgress");
   _completedCardEl = document.querySelector("#completed");
   _tasksContainersEl = document.querySelectorAll(".card__tasks-container");
   _data;
 
   constructor() {
     makeDraggable(this._parentEl);
-    this._tasksContainersEl.forEach((container) => makeDroppable(container));
+    this._tasksContainersEl.forEach((container) =>
+      makeDroppable(container, this._parentEl)
+    );
   }
 
   render(data) {
@@ -23,6 +25,12 @@ class TaskBoardView {
 
   addHandlerRender(handler) {
     handler();
+  }
+
+  addHandlerUpdateTaskStatus(handler) {
+    this._parentEl.addEventListener("taskStatusChanged", (e) =>
+      handler(e.detail)
+    );
   }
 
   _generateMarkup() {

@@ -24,7 +24,7 @@ export function makeDraggable(node) {
   events.forEach((ev) => node.addEventListener(ev.name, ev.handler));
 }
 
-export function makeDroppable(node) {
+export function makeDroppable(node, customEventsListner = undefined) {
   const events = [
     {
       name: "dragenter",
@@ -55,14 +55,24 @@ export function makeDroppable(node) {
 
         // Get the draggable element
         const id = e.dataTransfer.getData("text/plain");
-
         const draggableItem = document.getElementById(id);
 
         // If not the right element then exit
         if (!draggableItem) return;
 
+        // Create an event that carries updated status data and dispatch it to update the state
+        const eventData = {
+          id: draggableItem.dataset.id,
+          status: draggableItem.dataset.status,
+          newStatus: e.target.parentElement.id,
+        };
+        const taskStatusChangedEvent = new CustomEvent("taskStatusChanged", {
+          detail: eventData,
+        });
+        customEventsListner.dispatchEvent(taskStatusChangedEvent);
+
         // Add it to the drop target
-        e.target.append(draggableItem);
+        if (!customEventsListner) e.target.append(draggableItem);
       },
     },
   ];

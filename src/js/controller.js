@@ -99,7 +99,17 @@ const updateTask = function (data) {
   modalView.closeModal();
 };
 
+// Control update the task status
+const updateTaskStatus = function (task) {
+  // Update status
+  model.updateTaskStatus(task.id, task.status, task.newStatus);
+
+  // Re-render the tasks board
+  displayTasks();
+};
+
 // Event Handlers
 taskBoardView.addHandlerRender(displayTasks);
+taskBoardView.addHandlerUpdateTaskStatus(updateTaskStatus);
 displayTaskView.addHandlerRender(displayTask);
 addTaskView.addHandlerRender(displayAddTask);
