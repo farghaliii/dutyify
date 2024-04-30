@@ -49,16 +49,16 @@ body {
 .main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  row-gap: 1.8rem;
+  row-gap: 6.4rem;
   padding: 0 2.4rem;
 }
 
-.secondary-header {
+.board-header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 2.4rem;
-  padding-bottom: 0;
+  margin-top: 2.4rem;
   grid-column: 1/-1;
 }
 .primary-heading-box {
@@ -67,29 +67,70 @@ body {
 }
 .primary-heading {
   display: inline-block;
-  font-size: 3.2rem;
-  font-weight: 100;
+  font-size: 2.4rem;
+  font-weight: 300;
+  line-height: 1;
 }
 .primary-heading::after {
   content: "|";
   color: #a71244;
-  font-weight: 400;
+  font-weight: 700;
 }
 .category {
   font-weight: 300;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #444444;
   cursor: pointer;
 }
 
-.nav {
-  margin-top: 0.4rem;
+.nav__actions-box {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
 }
 
-.action-box {
+.sort__options,
+.filter__options {
   display: flex;
-  gap: 4.8rem;
+  align-items: center;
+  gap: 0.8rem;
 }
+
+.radio__label {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+.radio__btn {
+  position: relative;
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 0.1rem solid #a71244;
+  border-radius: 0.2rem;
+}
+
+.radio__btn::after {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: #a71244;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.radio__input {
+  display: none;
+}
+.radio__input:checked + .radio__label .radio__btn::after {
+  opacity: 1;
+}
+
 .btn {
   display: flex;
   align-items: center;
@@ -120,6 +161,21 @@ body {
 .btn--add:hover {
   background-color: #a71244;
   color: #fff;
+}
+
+.board-header__dropmenu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f3f3;
+  width: 100%;
+  max-height: 6.2rem;
+  padding: 1.2rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateY(130%);
+  transition: opacity 0.4s;
 }
 
 /* Board */

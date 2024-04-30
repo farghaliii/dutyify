@@ -4,6 +4,9 @@ import { makeDraggable, makeDroppable } from "../helpers";
 
 class TaskBoardView {
   _parentEl = document.querySelector(".board");
+  _boardHeaderEl = document.querySelector(".board-header");
+  _dropmenuEl = this._boardHeaderEl.querySelector(".board-header__dropmenu");
+  _dropmenuContentEl = this._dropmenuEl.querySelector(".dropmenu__content");
   _todoCardEl = document.querySelector("#todo");
   _outdatedCardEl = document.querySelector("#outdated");
   _inprogressCardEl = document.querySelector("#inProgress");
@@ -16,6 +19,8 @@ class TaskBoardView {
     this._tasksContainersEl.forEach((container) =>
       makeDroppable(container, this._parentEl)
     );
+
+    this._addHandlerDisplayActions();
   }
 
   render(data) {
@@ -31,6 +36,23 @@ class TaskBoardView {
     this._parentEl.addEventListener("taskStatusChanged", (e) =>
       handler(e.detail)
     );
+  }
+
+  _addHandlerDisplayActions() {
+    this._boardHeaderEl.addEventListener("click", (e) => {
+      const actionBtn = e.target.closest(".btn");
+
+      if (
+        !actionBtn ||
+        (!actionBtn.classList.contains("btn--sort") &&
+          !actionBtn.classList.contains("btn--filter"))
+      )
+        return;
+
+      const action = actionBtn.dataset.actionType;
+
+      this._displayActionOptions(action);
+    });
   }
 
   _generateMarkup() {
@@ -107,6 +129,82 @@ class TaskBoardView {
           </div>
         </div>
       </li>
+    `;
+  }
+
+  _displayActionOptions(action) {
+    let markup = "";
+    if (action == "sort") markup = this._generateSortActionMarkup();
+    if (action == "filter") markup = this._generateFilterActionMarkup();
+
+    if (action == this._dropmenuEl.dataset.currentAction) {
+    }
+
+    if (this._dropmenuEl.dataset.isOpen == "false") {
+      this._dropmenuContentEl.innerHTML = "";
+      this._dropmenuContentEl.insertAdjacentHTML("afterbegin", markup);
+      this._dropmenuEl.dataset.isOpen = "true";
+      this._dropmenuEl.classList.remove("hidden");
+    } else {
+      this._dropmenuEl.dataset.isOpen = "false";
+      this._dropmenuEl.classList.add("hidden");
+    }
+  }
+
+  _generateSortActionMarkup() {
+    return `
+      <div class="sort__options">
+        <div class="sort__option radio__group">
+          <input type="radio" name="sort-dueDate" id="sortDueDateASC" class="radio__input">
+          <label for="sortDueDateASC" class="radio__label">
+            <span class="radio__btn"></span>
+            Due Date: ASC
+          </label>
+        </div>
+        <div class="sort__option radio__group">
+          <input type="radio" name="sort-dueDate" id="sortDueDateDESC" class="radio__input">
+          <label for="sortDueDateDESC" class="radio__label">
+            <span class="radio__btn"></span>
+            Due Date: DESC
+          </label>
+        </div>
+
+        <div class="sort__option radio__group">
+          <input type="radio" name="sort-priority" id="sortPriorityDESC" class="radio__input">
+          <label for="sortPriorityDESC" class="radio__label">
+            <span class="radio__btn"></span>
+            Priority: DESC
+          </label>
+        </div>
+
+        <div class="sort__option radio__group">
+          <input type="radio" name="sort-priority" id="sortPriorityASC" class="radio__input">
+          <label for="sortPriorityASC" class="radio__label">
+            <span class="radio__btn"></span>
+            Priority: ASC
+          </label>
+        </div>
+     </div>
+    `;
+  }
+  _generateFilterActionMarkup() {
+    return `
+      <div class="filter__options">
+        <div class="filter__option radio__group">
+          <input type="radio" name="filter" id="filterDueDateASC" class="radio__input">
+          <label for="filterDueDateASC" class="radio__label">
+            <span class="radio__btn"></span>
+            Due Date: ASC
+          </label>
+        </div>
+        <div class="filter__option radio__group">
+          <input type="radio" name="filter" id="filterDueDateDESC" class="radio__input">
+          <label for="filterDueDateDESC" class="radio__label">
+            <span class="radio__btn"></span>
+            Due Date: DESC
+          </label>
+        </div>
+      </div>
     `;
   }
 }
