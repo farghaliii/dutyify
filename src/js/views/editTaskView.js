@@ -1,5 +1,6 @@
 import "core-js/stable";
 import { formDataExtraction } from "../helpers";
+import { PRIORITY_LOW, PRIORITY_HIGH, PRIORITY_MEDIUM } from "../config";
 
 class EditTaskView {
   _parentEl = document.querySelector(".modal__content-body");
@@ -28,30 +29,36 @@ class EditTaskView {
 
   _generateMarkup() {
     const todayDate = new Date().toISOString().split("T")[0];
+    const task = this._data.task;
     const markup = `
       <form class="form form--editing">
-        <input type="hidden" name="id" value="${this._data.task.id}" />
-        <input type="hidden" name="oldStatus" value="${
-          this._data.task.status
-        }" />
+        <input type="hidden" name="id" value="${task.id}" />
+        <input type="hidden" name="oldStatus" value="${task.status}" />
 
         <div class="form__first-box">
           <div class="form__group form__group--full-col">
             <label for="title">Title</label>
-            <input type="text" name="title" value="${
-              this._data.task.title
-            }" id="title" minlength="4" placeholder="Task's title..." required>
+            <input
+              type="text"
+              name="title"
+              value="${task.title}" 
+              id="title" minlength="4" 
+              placeholder="Task's title..." required>
             <span class="feedback-message">Must be more than<span class="highlighted">4 characters</span>.</span>
           </div>
 
           <div class="form__group form__group--full-col">
             <label for="description">Description</label>
-            <textarea name="description" id="description" minlength="8" cols="30" rows="10" value="${
-              this._data.task.description
-            }"
-              placeholder="Task's description..." required>${
-                this._data.task.description
-              }</textarea>
+            <textarea 
+              name="description" 
+              id="description" 
+              minlength="8" 
+              cols="30" 
+              rows="10" 
+              value="${task.description}"
+              placeholder="Task's description..." required>
+              ${task.description}
+              </textarea>
             <span class="feedback-message">Must be more than<span class="highlighted">10 characters</span></span>
           </div>
         </div>
@@ -59,9 +66,11 @@ class EditTaskView {
         <div class="form__second-box">
           <div class="form__group">
             <label for="keywords">Keywords</label>
-            <input type="text" name="keywords" value="${this._data.task.keywords.join(
-              ","
-            )}" id="keywords" placeholder="keywords Separated by comma ','">
+            <input
+              type="text"
+              name="keywords"
+              value="${task.keywords.join(",")}" 
+              id="keywords" placeholder="keywords Separated by comma ','">
             <span class="feedback-message">Optional! Maximum<span class="highlighted">3 keywords</span>.</span>
           </div>
 
@@ -72,7 +81,7 @@ class EditTaskView {
                 .map(
                   (cat) =>
                     `<option value="${cat.id}" ${
-                      this._data.task.category.id == cat.id ? "selected" : ""
+                      task.category.id == cat.id ? "selected" : ""
                     }>${cat.name}</option>`
                 )
                 .join("")}
@@ -82,38 +91,55 @@ class EditTaskView {
           <div class="form__group">
             <label for="priority-level">Priority</label>
             <select name="priority-level" id="priority-level">
-              <option value="low" ${
-                this._data.task.priority == "low" ? "selected" : ""
-              }>Low</option>
-              <option value="medium" ${
-                this._data.task.priority == "medium" ? "selected" : ""
-              }>Medium</option>
-              <option value="high" ${
-                this._data.task.priority == "high" ? "selected" : ""
-              }>High</option>
+              <option
+                value="${PRIORITY_LOW}" 
+                ${task.priority == PRIORITY_LOW ? "selected" : ""}>
+                Low
+              </option>
+
+              <option
+                value="${PRIORITY_MEDIUM}" 
+                ${task.priority == PRIORITY_MEDIUM ? "selected" : ""}>
+                Medium
+              </option>
+
+              <option
+                value="${PRIORITY_HIGH}" 
+                ${task.priority == PRIORITY_HIGH ? "selected" : ""}>
+                High
+              </option>
             </select>
           </div>
 
           <div class="form__group">
             <label for="status">Status</label>
             <select name="status" id="status">
-              <option value="todo" ${
-                this._data.task.status == "todo" ? "selected" : ""
-              }>Todo</option>
-              <option value="inProgress" ${
-                this._data.task.status == "inProgress" ? "selected" : ""
-              }>In Progress</option>
-              <option value="completed" ${
-                this._data.task.status == "completed" ? "selected" : ""
-              }>Completed</option>
+              <option 
+                value="todo" 
+                ${task.status == "todo" ? "selected" : ""}>
+              Todo
+              </option>
+
+              <option 
+                value="inProgress" 
+                ${task.status == "inProgress" ? "selected" : ""}>
+              In Progress
+              </option>
+
+              <option 
+                value="completed" 
+                ${task.status == "completed" ? "selected" : ""}>
+                Completed
+              </option>
             </select>
           </div>
 
           <div class="form__group">
             <label for="due-date">Due Date</label>
-            <input type="date" value="${
-              this._data.task.dueDate
-            }" min="${todayDate}" name="due-date" id="due-date">
+            <input 
+            type="date" 
+            value="${task.dueDate}" 
+            min="${todayDate}" name="due-date" id="due-date">
             <span class="feedback-message">Only<span class="highlighted">future</span> dates.</span>
           </div>
         </div>

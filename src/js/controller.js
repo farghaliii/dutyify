@@ -9,8 +9,7 @@ import modalView from "./views/modalView.js";
 
 // Control displaying all tasks
 const displayTasks = function () {
-  const tasks = model.state.tasks;
-  taskBoardView.render(tasks);
+  taskBoardView.render(model.state.tasks);
 };
 
 // Control displaying a task
@@ -108,8 +107,16 @@ const updateTaskStatus = function (task) {
   displayTasks();
 };
 
+// Control actions
+const handleAction = function (action) {
+  // Call action function
+  model[action.name](action.property, action.propertyValue);
+  taskBoardView.render(model.state.tasks);
+};
+
 // Event Handlers
 taskBoardView.addHandlerRender(displayTasks);
 taskBoardView.addHandlerUpdateTaskStatus(updateTaskStatus);
+taskBoardView.addHandlerActions(handleAction);
 displayTaskView.addHandlerRender(displayTask);
 addTaskView.addHandlerRender(displayAddTask);

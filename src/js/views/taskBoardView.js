@@ -19,8 +19,6 @@ class TaskBoardView {
     this._tasksContainersEl.forEach((container) =>
       makeDroppable(container, this._parentEl)
     );
-
-    this._addHandlerDisplayActions();
   }
 
   render(data) {
@@ -38,20 +36,34 @@ class TaskBoardView {
     );
   }
 
-  _addHandlerDisplayActions() {
+  addHandlerActions(handler = undefined) {
     this._boardHeaderEl.addEventListener("click", (e) => {
       const actionBtn = e.target.closest(".btn");
+      const radioInput = e.target.closest("input");
 
-      if (
-        !actionBtn ||
-        (!actionBtn.classList.contains("btn--sort") &&
-          !actionBtn.classList.contains("btn--filter"))
-      )
-        return;
+      // For displaying action's aptions
+      if (actionBtn && !radioInput) {
+        if (
+          !actionBtn.classList.contains("btn--sort") &&
+          !actionBtn.classList.contains("btn--filter")
+        )
+          return;
+        const action = actionBtn.dataset.actionType;
+        this._displayActionOptions(action);
+      }
 
-      const action = actionBtn.dataset.actionType;
+      // For applying the action [sorting | filtering ..etc]
+      if (!actionBtn && radioInput) {
+        const action = {
+          name: radioInput.name.split("-")[0],
+          property: radioInput.name.split("-")[1],
+          propertyValue: radioInput.value,
+        };
 
-      this._displayActionOptions(action);
+        handler(action);
+      }
+
+      return;
     });
   }
 
@@ -134,35 +146,38 @@ class TaskBoardView {
 
   _displayActionOptions(action) {
     let markup = "";
+
+    // If user clicked on the same action button that mean show/hide these action's options
+    if (action == this._dropmenuEl.dataset.currentAction) {
+      this._dropmenuEl.classList.toggle("hidden");
+      return;
+    }
+
+    // If user clicked on different action button that means generate that action's markup and display it
+
+    // Generate the markup according to the action
     if (action == "sort") markup = this._generateSortActionMarkup();
     if (action == "filter") markup = this._generateFilterActionMarkup();
 
-    if (action == this._dropmenuEl.dataset.currentAction) {
-    }
-
-    if (this._dropmenuEl.dataset.isOpen == "false") {
-      this._dropmenuContentEl.innerHTML = "";
-      this._dropmenuContentEl.insertAdjacentHTML("afterbegin", markup);
-      this._dropmenuEl.dataset.isOpen = "true";
-      this._dropmenuEl.classList.remove("hidden");
-    } else {
-      this._dropmenuEl.dataset.isOpen = "false";
-      this._dropmenuEl.classList.add("hidden");
-    }
+    // Displaying it.
+    this._dropmenuContentEl.innerHTML = "";
+    this._dropmenuContentEl.insertAdjacentHTML("afterbegin", markup);
+    this._dropmenuEl.dataset.currentAction = action;
+    this._dropmenuEl.classList.remove("hidden");
   }
 
   _generateSortActionMarkup() {
     return `
       <div class="sort__options">
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-dueDate" id="sortDueDateASC" class="radio__input">
+          <input type="radio" name="sort-dueDate" id="sortDueDateASC" value="asc" class="radio__input">
           <label for="sortDueDateASC" class="radio__label">
             <span class="radio__btn"></span>
             Due Date: ASC
           </label>
         </div>
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-dueDate" id="sortDueDateDESC" class="radio__input">
+          <input type="radio" name="sort-dueDate" id="sortDueDateDESC" value="desc" class="radio__input">
           <label for="sortDueDateDESC" class="radio__label">
             <span class="radio__btn"></span>
             Due Date: DESC
@@ -170,7 +185,7 @@ class TaskBoardView {
         </div>
 
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-priority" id="sortPriorityDESC" class="radio__input">
+          <input type="radio" name="sort-priority" id="sortPriorityDESC" value="desc" class="radio__input">
           <label for="sortPriorityDESC" class="radio__label">
             <span class="radio__btn"></span>
             Priority: DESC
@@ -178,7 +193,7 @@ class TaskBoardView {
         </div>
 
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-priority" id="sortPriorityASC" class="radio__input">
+          <input type="radio" name="sort-priority" id="sortPriorityASC" value="asc" class="radio__input">
           <label for="sortPriorityASC" class="radio__label">
             <span class="radio__btn"></span>
             Priority: ASC
@@ -191,14 +206,14 @@ class TaskBoardView {
     return `
       <div class="filter__options">
         <div class="filter__option radio__group">
-          <input type="radio" name="filter" id="filterDueDateASC" class="radio__input">
+          <input type="radio" name="filter" id="filterDueDateASC" value="asc" class="radio__input">
           <label for="filterDueDateASC" class="radio__label">
             <span class="radio__btn"></span>
             Due Date: ASC
           </label>
         </div>
         <div class="filter__option radio__group">
-          <input type="radio" name="filter" id="filterDueDateDESC" class="radio__input">
+          <input type="radio" name="filter" id="filterDueDateDESC" value="desc" class="radio__input">
           <label for="filterDueDateDESC" class="radio__label">
             <span class="radio__btn"></span>
             Due Date: DESC

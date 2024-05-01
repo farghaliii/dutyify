@@ -175,7 +175,6 @@ body {
   bottom: 0;
   left: 0;
   transform: translateY(130%);
-  transition: opacity 0.4s;
 }
 
 /* Board */
@@ -269,25 +268,25 @@ body {
   text-transform: capitalize;
   font-weight: 500;
 }
-.priority__status--low {
+.priority__status--1 {
   background-color: #219653;
   color: #f9f9f9;
 }
-.priority__status--medium {
+.priority__status--2 {
   background-color: #f2c94c;
   color: #222222;
 }
-.priority__status--high {
+.priority__status--3 {
   background-color: #eb5757;
   color: #f9f9f9;
 }
-.priority__status--low::after {
+.priority__status--1::after {
   content: "Low";
 }
-.priority__status--medium::after {
+.priority__status--2::after {
   content: "Medium";
 }
-.priority__status--high::after {
+.priority__status--3::after {
   content: "High";
 }
 .task__keywords {
@@ -314,13 +313,13 @@ body {
   cursor: auto;
 }
 
-.task--low {
+.task--1 {
   border-color: #219653;
 }
-.task--medium {
+.task--2 {
   border-color: #f2c94c;
 }
-.task--high {
+.task--3 {
   border-color: #eb5757;
 }
 .task--opened .priority__status {
@@ -614,7 +613,6 @@ input#due-date:valid + span::after {
   height: 0;
   padding: 0 !important;
   margin: 0 !important;
-  transform: translateX(100%);
 }
 /* ---------- */
 

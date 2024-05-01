@@ -1,5 +1,6 @@
 import "core-js/stable";
 import { randomId } from "./helpers";
+import { PRIORITY_LOW, PRIORITY_MEDIUM, PRIORITY_HIGH } from "./config";
 
 export const state = initData();
 
@@ -70,6 +71,40 @@ export function deleteTask(task) {
   storeData(state);
 }
 
+export function sort(property, propertyValue) {
+  if (property == "dueDate") sortByDueDate(propertyValue);
+  if (property == "priority") sortByPriority(propertyValue);
+
+  // Update persistent data
+  storeData(state);
+}
+
+function sortByPriority(order = "desc") {
+  for (const key in state.tasks) {
+    if (Object.hasOwnProperty.call(state.tasks, key)) {
+      const tasks = state.tasks[key];
+      if (order == "asc") {
+        tasks.sort((a, b) => a.priority - b.priority);
+      } else {
+        tasks.sort((a, b) => b.priority - a.priority);
+      }
+    }
+  }
+}
+
+function sortByDueDate(order = "desc") {
+  for (const key in state.tasks) {
+    if (Object.hasOwnProperty.call(state.tasks, key)) {
+      const tasks = state.tasks[key];
+      if (order == "asc") {
+        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+      } else {
+        tasks.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
+      }
+    }
+  }
+}
+
 function generateTaskId() {
   // Generate random id consists of 6 chrachters
   return randomId(6);
@@ -102,7 +137,7 @@ function storeData(data = undefined) {
             title: "Web Development Project",
             description:
               "This project is an extensive endeavor that encompasses the intricate process of developing a website from scraolve-04-14s crafting a digital space that not only showcases information but also provides functionality and interactivity to usonce-04-14ptualization to execution, every step in the journey of creating this website demands meticulous attention to detail and a deep understanding of various web development technologies and methodologvelo-04-14pment team will need to collaborate closely, leveraging their expertise in CSS, HTML, and JavaScript to bring the vision to lerar-04-14ching goal is to deliver a seamlessly navigable, visually captivating, and technically robust website that meets the client's requirements and exceeds user expectations.",
-            priority: "high",
+            priority: PRIORITY_HIGH,
             status: "todo",
             category: {
               id: "web-development",
@@ -116,7 +151,7 @@ function storeData(data = undefined) {
             title: "Design Landing Page",
             description:
               "The task at hand involves creating a visually stunning and engaging landing page design that serves as the gateway to the websivat-04-14ing landing page is essential for making a strong first impression on visitors and enticing them to explore furtesig-04-14n endeavor requires meticulous attention to detail, as every element, from the layout to the color scheme, plays a crucial role in shaping the user experiesign-04-14 team will need to leverage their creativity and expertise in tools like Figma to craft a design that not only reflects the brand identity but also effectively communicates the desired message to the target audieive -04-14refinement and feedback incorporation are integral parts of the design process to ensure the final product aligns with the project objectives and exceeds expectations.",
-            priority: "medium",
+            priority: PRIORITY_MEDIUM,
             status: "todo",
             category: {
               id: "design",
@@ -130,7 +165,7 @@ function storeData(data = undefined) {
             title: "Application Enhancement",
             description:
               "This task involves enhancing the functionality and user experience of the Dutyify application, a critical component of the project ecosysject-04-14ive is to identify areas for improvement and implement enhancements that address user pain points, streamline workflows, and introduce new features to stay competitive in the marging-04-14 their expertise in JavaScript and app development, the development team will collaborate to implement these enhancements effectively and efficienthe -04-14importance of this task, a sense of urgency is warranted to ensure timely delivery and maximum impact on user satisfaction and business success.",
-            priority: "low",
+            priority: PRIORITY_LOW,
             status: "todo",
             category: {
               id: "dutyify-application",
@@ -144,7 +179,7 @@ function storeData(data = undefined) {
             title: "Testing Environment Setup",
             description:
               "In order to ensure the reliability and stability of the system, it is imperative to establish a robust testing environment for automated testnvol-04-14ves configuring the necessary infrastructure, selecting appropriate testing tools and frameworks, and implementing automated test scripts to validate the functionality and performance of the softwstin-04-14g team will work closely with the development team to set up a comprehensive testing suite that covers all aspects of the application, including unit testing and integration testesti-04-14ng time and resources in establishing a solid testing infrastructure, we can detect and address defects early in the development lifecycle, ultimately delivering a higher quality product to our users.",
-            priority: "low",
+            priority: PRIORITY_LOW,
             status: "todo",
             category: {
               id: "testing",
@@ -158,7 +193,7 @@ function storeData(data = undefined) {
             title: "E-commerce Website Design",
             description:
               "The task at hand involves designing an e-commerce website with user-friendly interfaces that facilitate seamless browsing, product discovery, and checkout experienessf-04-14ul e-commerce design should not only be visually appealing but also intuitive and conversion-focused, driving users to take desired actions and ultimately make purchasign-04-14 team will need to leverage their expertise in UI/UX design principles, along with insights from user research and industry best practices, to create a design that not only meets but exceeds user expectatiorat-04-14ion with stakeholders and iterative design iterations will be key to refining the design and ensuring alignment with business goals and user needs.",
-            priority: "medium",
+            priority: PRIORITY_MEDIUM,
             status: "todo",
             category: {
               id: "web-development",
@@ -172,7 +207,7 @@ function storeData(data = undefined) {
             title: "API Documentation",
             description:
               "Creating comprehensive documentation for the APIs is crucial for facilitating integration and usage by developers, both internally and externaI do-04-14cumentation should provide clear and concise instructions on how to interact with the APIs, including endpoints, request/response formats, authentication mechanisms, and usage examponal-04-14ly, it should cover any relevant usage policies, versioning strategies, and best practices to ensure smooth integration and minimize developer frictcume-04-14ntation team will collaborate with the development team to gather necessary information and ensure accuracy and completeness of the documentatesti-04-14ng in well-documented APIs, we can empower developers to leverage our platform effectively, fostering innovation and driving ecosystem growth.",
-            priority: "low",
+            priority: PRIORITY_LOW,
             status: "todo",
             category: {
               id: "documentation",
@@ -186,7 +221,7 @@ function storeData(data = undefined) {
             title: "SEO Optimization",
             description:
               "Optimizing the website for better search engine ranking is a multifaceted task that involves implementing various strategies to improve visibility and organic trafnclu-04-14des keyword research, on-page optimization, technical SEO enhancements, and off-page SEO tactics such as link building and content promotO te-04-14am will work closely with the development and content teams to identify optimization opportunities and implement changes that align with search engine algorithms and user intuous-04-14 monitoring and analysis of key performance indicators will inform ongoing optimization efforts, ensuring sustainable growth in search engine visibility and driving targeted traffic to the website.",
-            priority: "medium",
+            priority: PRIORITY_MEDIUM,
             status: "todo",
             category: {
               id: "marketing",
@@ -202,7 +237,7 @@ function storeData(data = undefined) {
             title: "Mobile App Development",
             description:
               "Developing a mobile application for Android and iOS platforms is a complex undertaking that requires expertise in cross-platform development frameworks and mobile app design principal i-04-14s to create a seamless and intuitive user experience that leverages the unique capabilities of each platform while maintaining consistency across devivelo-04-14pment team will utilize technologies such as React Native and Flutter to build the app's frontend, while integrating with backend services to ensure data synchronization and real-time functionaluous-04-14 testing and refinement are integral parts of the development process, as we strive to deliver a polished and high-quality app that delights users and meets business objectives.",
-            priority: "high",
+            priority: PRIORITY_HIGH,
             status: "inProgress",
             category: {
               id: "mobile-development",
@@ -216,7 +251,7 @@ function storeData(data = undefined) {
             title: "Graphic Design Project",
             description:
               "Creating graphics for marketing materials requires a combination of creativity, technical skill, and an understanding of brand identity and messagr de-04-14signing social media graphics, advertising materials, or promotional assets, the goal is to captivate and engage the audience while effectively communicating the intended messsign-04-14 team will leverage tools like Photoshop and Illustrator to bring concepts to life, experimenting with color palettes, typography, and imagery to achieve the desired visual imporat-04-14ion with stakeholders and feedback incorporation are essential to ensure the final deliverables align with brand guidelines and resonate with the target audience.",
-            priority: "low",
+            priority: PRIORITY_LOW,
             status: "inProgress",
             category: {
               id: "design",
@@ -230,7 +265,7 @@ function storeData(data = undefined) {
             title: "Backend API Development",
             description:
               "Developing APIs for the backend of the system is a foundational task that underpins the functionality and interoperability of the entire application ecosysIs s-04-14erve as the bridge between the frontend user interface and the underlying data and business logic, enabling seamless communication and data exchaging-04-14 technologies such as Node.js, Express, and MongoDB, the development team will design and implement APIs that are scalable, secure, and performgh t-04-14esting and documentation are essential to ensure the reliability and usability of the APIs, empowering frontend developers and third-party integrators to build on top of our platform with confidence.",
-            priority: "medium",
+            priority: PRIORITY_MEDIUM,
             status: "inProgress",
             category: {
               id: "backend-development",
@@ -244,7 +279,7 @@ function storeData(data = undefined) {
             title: "Database Schema Design",
             description:
               "Designing the schema for the database is a critical task that lays the foundation for data organization, storage, and retrieval within the systaba-04-14se schema defines the structure of tables, relationships between entities, and constraints that ensure data integrity and consisteging-04-14 expertise in database design principles and SQL, the development team will design a schema that meets the requirements of the application, optimizing for performance, scalability, and maintainabilorat-04-14ion with stakeholders and thorough validation through testing are essential to ensure the adequacy and effectiveness of the database design, setting the stage for a robust and reliable system.",
-            priority: "high",
+            priority: PRIORITY_HIGH,
             status: "inProgress",
             category: {
               id: "database",
@@ -260,7 +295,7 @@ function storeData(data = undefined) {
             title: "Content Management System Implementation",
             description:
               "Implementing a Content Management System (CMS) is a strategic initiative aimed at empowering content creators and streamlining the content publishing proctral-04-14izing content management and providing intuitive editing tools, a CMS enables efficient content creation, organization, and delivery across digital channging-04-14 platforms like WordPress and Drupal, the development team will customize and configure the CMS to meet the specific needs and requirements of the projrain-04-14ing and documentation will accompany the implementation to ensure smooth adoption and effective utilization of the CMS by content creators and administrators.",
-            priority: "medium",
+            priority: PRIORITY_MEDIUM,
             status: "completed",
             category: {
               id: "web-development",
@@ -274,7 +309,7 @@ function storeData(data = undefined) {
             title: "User Interface Refinement",
             description:
               "Refining the user interface based on user feedback is an iterative process aimed at enhancing usability, accessibility, and overall user satisfactheri-04-14ng and analyzing user feedback through surveys, usability tests, and analytics, we gain valuable insights into user needs and pain points, which inform design improvements and optimizatisign-04-14 team will collaborate closely with stakeholders to prioritize and implement changes that address identified issues and align with business objectiuous-04-14 monitoring and iteration are essential to ensure the UI evolves in response to changing user expectations and market dynamics, ultimately driving engagement and loyalty.",
-            priority: "low",
+            priority: PRIORITY_LOW,
             status: "completed",
             category: {
               id: "design",
@@ -288,7 +323,7 @@ function storeData(data = undefined) {
             title: "Security Audit",
             description:
               "Conducting a comprehensive security audit of the system is a proactive measure aimed at identifying and mitigating potential security risks and vulnerabilitluat-04-14ing the system architecture, codebase, and configuration against industry best practices and security standards, we can uncover weaknesses and areas of exposure that may be exploited by malicious actcuri-04-14ty team will utilize a combination of automated tools and manual analysis to assess the system's security posture and identify any gaps or deficiencatio-04-14n efforts will be prioritized based on risk severity, with measures implemented to strengthen defenses and protect sensitive data from unauthorized access or manipulation.",
-            priority: "high",
+            priority: PRIORITY_HIGH,
             status: "completed",
             category: {
               id: "security",
@@ -304,7 +339,7 @@ function storeData(data = undefined) {
             title: "Performance Tuning",
             description:
               "Tuning the system for better performance is an ongoing optimization effort aimed at maximizing efficiency and responsiveness across all aspects of the applicatnvol-04-14ves identifying and addressing performance bottlenecks, optimizing code execution, and fine-tuning system configurations to improve resource utilization and reduce lateging-04-14 performance monitoring tools and profiling techniques, the development team will analyze system behavior under different loads and usage scenarios to identify areas for improvementi-04-14ng optimizations and tuning parameters accordingly will result in a more responsive and scalable system that delivers a superior user experience.",
-            priority: "high",
+            priority: PRIORITY_HIGH,
             status: "outdated",
             category: {
               id: "performance",
@@ -318,7 +353,7 @@ function storeData(data = undefined) {
             title: "Email Newsletter Design",
             description:
               "Designing an attractive email newsletter template is a creative endeavor aimed at engaging subscribers and driving conversions through compelling content and visur pr-04-14omoting products, sharing news, or delivering personalized offers, an effective email newsletter design should capture attention, communicate information clearly, and encourage recipients to take actsign-04-14 team will leverage their expertise in email design best practices, including layout optimization, typography, and responsive design, to create a visually appealing and impactful templstin-04-14g and performance analysis will inform iterative refinements to maximize engagement and conversion rates, ultimately driving business growth through email marketing.",
-            priority: "medium",
+            priority: PRIORITY_MEDIUM,
             status: "outdated",
             category: {
               id: "design",

@@ -1,5 +1,6 @@
 import "core-js/stable";
 import { formDataExtraction } from "../helpers";
+import { PRIORITY_HIGH, PRIORITY_LOW, PRIORITY_MEDIUM } from "../config";
 
 class AddTaskView {
   _parentEl = document.querySelector(".modal__content-body");
@@ -68,9 +69,9 @@ class AddTaskView {
           <div class="form__group">
             <label for="priority-level">Priority</label>
             <select name="priority-level" id="priority-level">
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="${PRIORITY_LOW}">Low</option>
+              <option value="${PRIORITY_MEDIUM}">Medium</option>
+              <option value="${PRIORITY_HIGH}">High</option>
             </select>
           </div>
 
