@@ -13,6 +13,7 @@ class TaskBoardView {
   _completedCardEl = document.querySelector("#completed");
   _tasksContainersEl = document.querySelectorAll(".card__tasks-container");
   _data;
+  _sortingSteps = [];
 
   constructor() {
     makeDraggable(this._parentEl);
@@ -48,18 +49,17 @@ class TaskBoardView {
           !actionBtn.classList.contains("btn--filter")
         )
           return;
-        const action = actionBtn.dataset.actionType;
+        const action = actionBtn.dataset.actionName;
         this._displayActionOptions(action);
       }
 
       // For applying the action [sorting | filtering ..etc]
       if (!actionBtn && radioInput) {
         const action = {
-          name: radioInput.name.split("-")[0],
-          property: radioInput.name.split("-")[1],
-          propertyValue: radioInput.value,
+          name: radioInput.dataset.actionName,
+          field: radioInput.dataset.actionField,
+          value: radioInput.value,
         };
-
         handler(action);
       }
 
@@ -168,24 +168,26 @@ class TaskBoardView {
 
   _generateSortActionMarkup() {
     return `
+      <!-- Due Date -->
       <div class="sort__options">
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-dueDate" id="sortDueDateASC" value="asc" class="radio__input">
+          <input type="radio" data-action-name="sort" data-action-field="dueDate" name="sort-dueDate" id="sortDueDateASC" value="asc" class="radio__input">
           <label for="sortDueDateASC" class="radio__label">
             <span class="radio__btn"></span>
             Due Date: ASC
           </label>
         </div>
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-dueDate" id="sortDueDateDESC" value="desc" class="radio__input">
+          <input type="radio" data-action-name="sort" data-action-field="dueDate" name="sort-dueDate" id="sortDueDateDESC" value="desc" class="radio__input">
           <label for="sortDueDateDESC" class="radio__label">
             <span class="radio__btn"></span>
             Due Date: DESC
           </label>
         </div>
 
+        <!-- Priority -->
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-priority" id="sortPriorityDESC" value="desc" class="radio__input">
+          <input type="radio" data-action-name="sort" data-action-field="priority" name="sort-priority" id="sortPriorityDESC" value="desc" class="radio__input">
           <label for="sortPriorityDESC" class="radio__label">
             <span class="radio__btn"></span>
             Priority: DESC
@@ -193,10 +195,27 @@ class TaskBoardView {
         </div>
 
         <div class="sort__option radio__group">
-          <input type="radio" name="sort-priority" id="sortPriorityASC" value="asc" class="radio__input">
+          <input type="radio" data-action-name="sort" data-action-field="priority" name="sort-priority" id="sortPriorityASC" value="asc" class="radio__input">
           <label for="sortPriorityASC" class="radio__label">
             <span class="radio__btn"></span>
             Priority: ASC
+          </label>
+        </div>
+
+        <!-- Title -->
+        <div class="sort__option radio__group">
+          <input type="radio" data-action-name="sort" data-action-field="title" name="sort-title" id="sortTitleDESC" value="desc" class="radio__input">
+          <label for="sortTitleDESC" class="radio__label">
+            <span class="radio__btn"></span>
+            Title: DESC
+          </label>
+        </div>
+
+        <div class="sort__option radio__group">
+          <input type="radio" data-action-name="sort" data-action-field="title" name="sort-title" id="sortTitleASC" value="asc" class="radio__input">
+          <label for="sortTitleASC" class="radio__label">
+            <span class="radio__btn"></span>
+            Title: ASC
           </label>
         </div>
      </div>

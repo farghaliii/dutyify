@@ -109,9 +109,11 @@ const updateTaskStatus = function (task) {
 
 // Control actions
 const handleAction = function (action) {
-  // Call action function
-  model[action.name](action.property, action.propertyValue);
-  taskBoardView.render(model.state.tasks);
+  model.updateSortingCriteria(action);
+
+  let tasks = model.state.tasks;
+  tasks = model[action.name](tasks);
+  taskBoardView.render(tasks);
 };
 
 // Event Handlers

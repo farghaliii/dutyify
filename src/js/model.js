@@ -71,37 +71,65 @@ export function deleteTask(task) {
   storeData(state);
 }
 
-export function sort(property, propertyValue) {
-  if (property == "dueDate") sortByDueDate(propertyValue);
-  if (property == "priority") sortByPriority(propertyValue);
+export function sort(tasks) {
+  const dueDateCriterion = state.sortingCriteria.find(
+    (criterion) => criterion.field == "dueDate"
+  );
+  const priorityCriterion = state.sortingCriteria.find(
+    (criterion) => criterion.field == "priority"
+  );
+  const titleCriterion = state.sortingCriteria.find(
+    (criterion) => criterion.field == "title"
+  );
 
-  // Update persistent data
-  storeData(state);
-}
-
-function sortByPriority(order = "desc") {
-  for (const key in state.tasks) {
-    if (Object.hasOwnProperty.call(state.tasks, key)) {
-      const tasks = state.tasks[key];
-      if (order == "asc") {
-        tasks.sort((a, b) => a.priority - b.priority);
-      } else {
-        tasks.sort((a, b) => b.priority - a.priority);
+  for (const key in tasks) {
+    let val = 0;
+    tasks[key].sort((a, b) => {
+      // Sort by dueDate
+      if (dueDateCriterion) {
+        val =
+          dueDateCriterion.value == "asc"
+            ? new Date(a.dueDate) - new Date(b.dueDate)
+            : new Date(b.dueDate) - new Date(a.dueDate);
+        if (val !== 0) return val;
       }
-    }
+
+      // Sort by priority
+      if (priorityCriterion) {
+        val =
+          priorityCriterion.value == "asc"
+            ? a.priority - b.priority
+            : b.priority - a.priority;
+        if (val !== 0) return val;
+      }
+
+      // Sort by title
+      if (titleCriterion) {
+        val =
+          titleCriterion.value == "asc"
+            ? a.title.localeCompare(b.title)
+            : b.title.localeCompare(a.title);
+        if (val !== 0) return val;
+      }
+
+      return val;
+    });
   }
+  return tasks;
 }
 
-function sortByDueDate(order = "desc") {
-  for (const key in state.tasks) {
-    if (Object.hasOwnProperty.call(state.tasks, key)) {
-      const tasks = state.tasks[key];
-      if (order == "asc") {
-        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-      } else {
-        tasks.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
-      }
-    }
+export function updateSortingCriteria(action) {
+  const existingCriterion = state.sortingCriteria.find(
+    (criterion) => criterion.field === action.field
+  );
+
+  if (existingCriterion) {
+    existingCriterion.value = action.value;
+  } else {
+    state.sortingCriteria.push({
+      field: action.field,
+      value: action.value,
+    });
   }
 }
 
@@ -125,7 +153,6 @@ function getTaskKeywords(str) {
   }
   return arr2;
 }
-
 function storeData(data = undefined) {
   // Data Placeholder or Temp Data
   if (!data) {
@@ -136,14 +163,14 @@ function storeData(data = undefined) {
             id: 1,
             title: "Web Development Project",
             description:
-              "This project is an extensive endeavor that encompasses the intricate process of developing a website from scraolve-04-14s crafting a digital space that not only showcases information but also provides functionality and interactivity to usonce-04-14ptualization to execution, every step in the journey of creating this website demands meticulous attention to detail and a deep understanding of various web development technologies and methodologvelo-04-14pment team will need to collaborate closely, leveraging their expertise in CSS, HTML, and JavaScript to bring the vision to lerar-04-14ching goal is to deliver a seamlessly navigable, visually captivating, and technically robust website that meets the client's requirements and exceeds user expectations.",
+              "This project is an extensive endeavor that encompasses the intricate process of developing a website from scraolve-04-14s crafting a digital space that not only showcases information but also provides functionality and interactivity to usonce-04-14ptualization to execution, every criterion in the journey of creating this website demands meticulous attention to detail and a deep understanding of various web development technologies and methodologvelo-04-14pment team will need to collaborate closely, leveraging their expertise in CSS, HTML, and JavaScript to bring the vision to lerar-04-14ching goal is to deliver a seamlessly navigable, visually captivating, and technically robust website that meets the client's requirements and exceeds user expectations.",
             priority: PRIORITY_HIGH,
             status: "todo",
             category: {
               id: "web-development",
               name: "Web Development",
             },
-            dueDate: "2024-05-14",
+            dueDate: "2024-05-13",
             keywords: ["css", "html", "js"],
           },
           {
@@ -157,7 +184,7 @@ function storeData(data = undefined) {
               id: "design",
               name: "Design",
             },
-            dueDate: "2024-05-14",
+            dueDate: "2024-05-19",
             keywords: ["figma", "ui"],
           },
           {
@@ -171,7 +198,7 @@ function storeData(data = undefined) {
               id: "dutyify-application",
               name: "Dutyify Application",
             },
-            dueDate: "2024-05-14",
+            dueDate: "2024-06-14",
             keywords: ["js", "apps", "urgent"],
           },
           {
@@ -185,7 +212,7 @@ function storeData(data = undefined) {
               id: "testing",
               name: "Testing",
             },
-            dueDate: "2024-05-14",
+            dueDate: "2024-05-24",
             keywords: ["unit-testing", "integration-testing"],
           },
           {
@@ -199,7 +226,7 @@ function storeData(data = undefined) {
               id: "web-development",
               name: "Web Development",
             },
-            dueDate: "2024-05-14",
+            dueDate: "2024-05-05",
             keywords: ["ui", "ux", "ecommerce"],
           },
           {
@@ -213,7 +240,7 @@ function storeData(data = undefined) {
               id: "documentation",
               name: "Documentation",
             },
-            dueDate: "2024-05-14",
+            dueDate: "2024-05-04",
             keywords: ["api", "documentation"],
           },
           {
@@ -364,6 +391,8 @@ function storeData(data = undefined) {
           },
         ],
       },
+
+      sortingCriteria: [],
 
       categories: [
         { id: "general", name: "general" },
