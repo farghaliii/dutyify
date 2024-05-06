@@ -13,7 +13,6 @@ class TaskBoardView {
   _completedCardEl = document.querySelector("#completed");
   _tasksContainersEl = document.querySelectorAll(".card__tasks-container");
   _data;
-  _sortingSteps = [];
 
   constructor() {
     makeDraggable(this._parentEl);
@@ -37,34 +36,35 @@ class TaskBoardView {
     );
   }
 
-  addHandlerActions(handler = undefined) {
+  addHandlerActions(handler) {
     this._boardHeaderEl.addEventListener("click", (e) => {
       const actionBtn = e.target.closest(".btn");
       const radioInput = e.target.closest("input");
 
+      if (
+        (!actionBtn && !radioInput) ||
+        actionBtn.classList.contains("btn--add")
+      )
+        return;
+
       // For displaying action's aptions
-      if (actionBtn && !radioInput) {
-        if (
-          !actionBtn.classList.contains("btn--sort") &&
-          !actionBtn.classList.contains("btn--filter")
-        )
-          return;
-        const action = actionBtn.dataset.actionName;
-        this._displayActionOptions(action);
-      }
+      if (actionBtn && !radioInput)
+        this._displayActionOptions(actionBtn.dataset.actionName);
 
       // For applying the action [sorting | filtering ..etc]
-      if (!actionBtn && radioInput) {
-        const action = {
+      if (!actionBtn && radioInput)
+        handler({
           name: radioInput.dataset.actionName,
           field: radioInput.dataset.actionField,
           value: radioInput.value,
-        };
-        handler(action);
-      }
-
-      return;
+        });
     });
+  }
+
+  uncheckActionBtn(action) {
+    this._dropmenuContentEl.querySelector(
+      `[data-action-field='${action.field}'][value='${action.value}']`
+    ).checked = false;
   }
 
   _generateMarkup() {
@@ -174,14 +174,14 @@ class TaskBoardView {
           <input type="radio" data-action-name="sort" data-action-field="dueDate" name="sort-dueDate" id="sortDueDateASC" value="asc" class="radio__input">
           <label for="sortDueDateASC" class="radio__label">
             <span class="radio__btn"></span>
-            Due Date: ASC
+            Date - Earliest First
           </label>
         </div>
         <div class="sort__option radio__group">
           <input type="radio" data-action-name="sort" data-action-field="dueDate" name="sort-dueDate" id="sortDueDateDESC" value="desc" class="radio__input">
           <label for="sortDueDateDESC" class="radio__label">
             <span class="radio__btn"></span>
-            Due Date: DESC
+            Date - Latest First
           </label>
         </div>
 
@@ -190,7 +190,7 @@ class TaskBoardView {
           <input type="radio" data-action-name="sort" data-action-field="priority" name="sort-priority" id="sortPriorityDESC" value="desc" class="radio__input">
           <label for="sortPriorityDESC" class="radio__label">
             <span class="radio__btn"></span>
-            Priority: DESC
+            Priority - High to Low
           </label>
         </div>
 
@@ -198,7 +198,7 @@ class TaskBoardView {
           <input type="radio" data-action-name="sort" data-action-field="priority" name="sort-priority" id="sortPriorityASC" value="asc" class="radio__input">
           <label for="sortPriorityASC" class="radio__label">
             <span class="radio__btn"></span>
-            Priority: ASC
+            Priority - Low to High
           </label>
         </div>
 
@@ -207,7 +207,7 @@ class TaskBoardView {
           <input type="radio" data-action-name="sort" data-action-field="title" name="sort-title" id="sortTitleDESC" value="desc" class="radio__input">
           <label for="sortTitleDESC" class="radio__label">
             <span class="radio__btn"></span>
-            Title: DESC
+            Title - Z to A
           </label>
         </div>
 
@@ -215,7 +215,7 @@ class TaskBoardView {
           <input type="radio" data-action-name="sort" data-action-field="title" name="sort-title" id="sortTitleASC" value="asc" class="radio__input">
           <label for="sortTitleASC" class="radio__label">
             <span class="radio__btn"></span>
-            Title: ASC
+            Title - A to Z
           </label>
         </div>
      </div>

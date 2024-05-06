@@ -9,7 +9,10 @@ import modalView from "./views/modalView.js";
 
 // Control displaying all tasks
 const displayTasks = function () {
-  taskBoardView.render(model.state.tasks);
+  let tasks = JSON.parse(JSON.stringify(model.state.tasks));
+  // If there is sorting criteria will apply
+  tasks = model.sort(tasks);
+  taskBoardView.render(tasks);
 };
 
 // Control displaying a task
@@ -108,17 +111,29 @@ const updateTaskStatus = function (task) {
 };
 
 // Control actions
-const handleAction = function (action) {
-  model.updateSortingCriteria(action);
+const handleActions = function (action) {
+  // Deep cloning the tasks objects
+  // [This isn't the best way to clone an object deeply BUT it works fine here.]
+  // Maybe in another situation I'll use 'cloneDeep' from lodash library.
+  let tasks = JSON.parse(JSON.stringify(model.state.tasks));
 
-  let tasks = model.state.tasks;
-  tasks = model[action.name](tasks);
+  if (action.name == "sort") {
+    const isCriterionRemoved = model.updateSortingCriteria(action);
+    tasks = model.sort(tasks);
+    if (isCriterionRemoved) {
+      taskBoardView.uncheckActionBtn(action);
+    }
+  }
+
+  if (action.name == "filter") {
+  }
+
   taskBoardView.render(tasks);
 };
 
 // Event Handlers
 taskBoardView.addHandlerRender(displayTasks);
 taskBoardView.addHandlerUpdateTaskStatus(updateTaskStatus);
-taskBoardView.addHandlerActions(handleAction);
+taskBoardView.addHandlerActions(handleActions);
 displayTaskView.addHandlerRender(displayTask);
 addTaskView.addHandlerRender(displayAddTask);

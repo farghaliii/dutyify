@@ -119,18 +119,32 @@ export function sort(tasks) {
 }
 
 export function updateSortingCriteria(action) {
+  let criterionRemoved = false;
+
   const existingCriterion = state.sortingCriteria.find(
     (criterion) => criterion.field === action.field
   );
 
   if (existingCriterion) {
-    existingCriterion.value = action.value;
+    // If user click twise on the same criterion remove it from criteria
+    if (existingCriterion.value == action.value) {
+      state.sortingCriteria = state.sortingCriteria.filter(
+        (cri) => cri.field != action.field
+      );
+      criterionRemoved = true;
+    } else {
+      existingCriterion.value = action.value;
+    }
   } else {
     state.sortingCriteria.push({
       field: action.field,
       value: action.value,
     });
   }
+
+  storeData(state);
+
+  return criterionRemoved;
 }
 
 function generateTaskId() {
