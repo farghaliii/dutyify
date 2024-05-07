@@ -26,6 +26,14 @@ class TaskBoardView {
     this._generateMarkup();
   }
 
+  updateActionsUI(criteria) {
+    criteria.forEach((c) => {
+      this._dropmenuContentEl.querySelector(
+        `[data-action-field='${c.field}'][value='${c.value}']`
+      ).checked = true;
+    });
+  }
+
   addHandlerRender(handler) {
     handler();
   }
@@ -43,13 +51,15 @@ class TaskBoardView {
 
       if (
         (!actionBtn && !radioInput) ||
-        actionBtn.classList.contains("btn--add")
+        actionBtn?.classList.contains("btn--add")
       )
         return;
 
       // For displaying action's aptions
-      if (actionBtn && !radioInput)
+      if (actionBtn && !radioInput) {
         this._displayActionOptions(actionBtn.dataset.actionName);
+        handler({ name: `toggle-action`, type: actionBtn.dataset.actionName });
+      }
 
       // For applying the action [sorting | filtering ..etc]
       if (!actionBtn && radioInput)

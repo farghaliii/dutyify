@@ -71,14 +71,14 @@ export function deleteTask(task) {
   storeData(state);
 }
 
-export function sort(tasks) {
-  const dueDateCriterion = state.sortingCriteria.find(
+export function sortTasks(tasks) {
+  const dueDateCriterion = state.criteria.sort.find(
     (criterion) => criterion.field == "dueDate"
   );
-  const priorityCriterion = state.sortingCriteria.find(
+  const priorityCriterion = state.criteria.sort.find(
     (criterion) => criterion.field == "priority"
   );
-  const titleCriterion = state.sortingCriteria.find(
+  const titleCriterion = state.criteria.sort.find(
     (criterion) => criterion.field == "title"
   );
 
@@ -121,14 +121,14 @@ export function sort(tasks) {
 export function updateSortingCriteria(action) {
   let criterionRemoved = false;
 
-  const existingCriterion = state.sortingCriteria.find(
+  const existingCriterion = state.criteria.sort.find(
     (criterion) => criterion.field === action.field
   );
 
   if (existingCriterion) {
     // If user click twise on the same criterion remove it from criteria
     if (existingCriterion.value == action.value) {
-      state.sortingCriteria = state.sortingCriteria.filter(
+      state.criteria.sort = state.criteria.sort.filter(
         (cri) => cri.field != action.field
       );
       criterionRemoved = true;
@@ -136,7 +136,7 @@ export function updateSortingCriteria(action) {
       existingCriterion.value = action.value;
     }
   } else {
-    state.sortingCriteria.push({
+    state.criteria.sort.push({
       field: action.field,
       value: action.value,
     });
@@ -406,7 +406,7 @@ function storeData(data = undefined) {
         ],
       },
 
-      sortingCriteria: [],
+      criteria: { sort: [], filter: [] },
 
       categories: [
         { id: "general", name: "general" },

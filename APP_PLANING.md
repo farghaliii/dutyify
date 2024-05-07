@@ -176,6 +176,97 @@ the default behavior in these two events (**dragenter** and **dragover**) by usi
 1. [Javascript drag and drop](https://www.javascripttutorial.net/web-apis/javascript-drag-and-drop/)
 2. [Josestg: todo app](https://github.com/josestg/todo-app/)
 
+---
+
+### Sorting based on multiple criteria
+
+I already grasp how to sort based on a single criterion, but previously, I misunderstood the concept of sorting based on multiple criteria. Here's how sorting based on multiple criteria works:
+
+For example:
+
+| Title |  Due Date  | Priority |
+| :---: | :--------: | :------: |
+|   A   | 2024-10-01 |   low    |
+|   B   | 2024-10-03 |   high   |
+|   C   | 2024-10-01 |   high   |
+|   F   | 2024-10-05 |   low    |
+|   D   | 2024-10-05 |  meduim  |
+|   E   | 2024-10-03 |   high   |
+
+I want to sort this table **based on (Due date: desc, Priority: desc, Title: A-Z)**:
+
+| Title |    Due Date    | Priority |
+| :---: | :------------: | :------: |
+|  _D_  |  _2024-10-05_  | _meduim_ |
+|  _F_  |  _2024-10-05_  |  _low_   |
+| **B** | **2024-10-03** | **high** |
+| **E** | **2024-10-03** | **high** |
+|  _C_  |  _2024-10-01_  |  _high_  |
+|  _A_  |  _2024-10-01_  |  _low_   |
+
+Here's If we **changed Title to Z-A**:
+
+| Title |    Due Date    | Priority |
+| :---: | :------------: | :------: |
+|   D   |   2024-10-05   |  meduim  |
+|   F   |   2024-10-05   |   low    |
+| **E** | **2024-10-03** | **high** |
+| **B** | **2024-10-03** | **high** |
+|   C   |   2024-10-01   |   high   |
+|   A   |   2024-10-01   |   low    |
+
+**Okay! So what happens?**
+
+When sorting based on multiple criteria, The items are first sorted according to the primary criterion.
+**If there are ties in the primary criterion**, the items are **then sorted according to the secondary criterion** and so on. **This process continues until all criteria are applied**
+
+```js
+const tasks = [
+  { title: "A", dueDate: "2024-10-01", priority: "low" },
+  { title: "C", dueDate: "2024-10-01", priority: "high" },
+  { title: "B", dueDate: "2024-10-03", priority: "high" },
+  { title: "E", dueDate: "2024-10-03", priority: "high" },
+  { title: "D", dueDate: "2024-10-05", priority: "medium" },
+  { title: "F", dueDate: "2024-10-05", priority: "low" },
+];
+
+const dueDate = "desc";
+const priority = "desc";
+const title = "asc";
+
+tasks.sort((a, b) => {
+  let val = 0;
+
+  // Sort by dueDate
+  val =
+    dueDate == "asc"
+      ? new Date(a.dueDate) - new Date(b.dueDate)
+      : new Date(b.dueDate) - new Date(a.dueDate);
+
+  // Check if these items are equal, If not return the val else move on to the next criterion
+  if (val !== 0) return val;
+
+  // Sort by priority
+  val = priority == "asc" ? a.priority - b.priority : b.priority - a.priority;
+
+  // Check if these items are equal, If not return the val else move on to the next criterion
+  if (val !== 0) return val;
+
+  // Sort by title
+  val =
+    title == "asc"
+      ? a.title.localeCompare(b.title)
+      : b.title.localeCompare(a.title);
+
+  // Check if these items are equal, If not return the val else move on to the next criterion
+  if (val !== 0) return val;
+
+  return val;
+});
+```
+
+---
+
 ### Misc Problems
 
 - **Shortcut key functionality**
