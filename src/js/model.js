@@ -72,63 +72,60 @@ export function deleteTask(task) {
 }
 
 export function sortTasks(tasks) {
-  const dueDateCriterion = state.criteria.sort.find(
-    (criterion) => criterion.field == "dueDate"
-  );
-  const priorityCriterion = state.criteria.sort.find(
-    (criterion) => criterion.field == "priority"
-  );
-  const titleCriterion = state.criteria.sort.find(
-    (criterion) => criterion.field == "title"
-  );
-
   for (const key in tasks) {
-    let val = 0;
     tasks[key].sort((a, b) => {
-      // Sort by dueDate
-      if (dueDateCriterion) {
-        val =
-          dueDateCriterion.value == "asc"
-            ? new Date(a.dueDate) - new Date(b.dueDate)
-            : new Date(b.dueDate) - new Date(a.dueDate);
+      let val = 0;
+      //  To make sorting be based on the criterion and its order
+      for (const criterion of state.criteria.sort) {
+        const { field, value } = criterion;
+        const aVal = a[field];
+        const bVal = b[field];
+
+        if (field == "dueDate") {
+          val =
+            value == "asc"
+              ? new Date(aVal) - new Date(bVal)
+              : new Date(bVal) - new Date(aVal);
+        } else if (field == "title") {
+          val =
+            value == "asc"
+              ? aVal.localeCompare(bVal)
+              : bVal.localeCompare(aVal);
+        } else {
+          val = value == "asc" ? aVal - bVal : bVal - aVal;
+        }
+
         if (val !== 0) return val;
       }
-
-      // Sort by priority
-      if (priorityCriterion) {
-        val =
-          priorityCriterion.value == "asc"
-            ? a.priority - b.priority
-            : b.priority - a.priority;
-        if (val !== 0) return val;
-      }
-
-      // Sort by title
-      if (titleCriterion) {
-        val =
-          titleCriterion.value == "asc"
-            ? a.title.localeCompare(b.title)
-            : b.title.localeCompare(a.title);
-        if (val !== 0) return val;
-      }
-
       return val;
     });
   }
   return tasks;
 }
 
-export function updateSortingCriteria(action) {
+export function filterTasks(tasks) {
+  state.criteria.filter.forEach((criterion) => {
+    for (const key in tasks) {
+      tasks[key] = tasks[key].filter(
+        (item) => item[criterion.field] == criterion.value
+      );
+    }
+  });
+  return tasks;
+}
+
+export function updateCriteria(action) {
+  console.log(action);
   let criterionRemoved = false;
 
-  const existingCriterion = state.criteria.sort.find(
+  const existingCriterion = state.criteria[action.name].find(
     (criterion) => criterion.field === action.field
   );
 
   if (existingCriterion) {
     // If user click twise on the same criterion remove it from criteria
     if (existingCriterion.value == action.value) {
-      state.criteria.sort = state.criteria.sort.filter(
+      state.criteria[action.name] = state.criteria[action.name].filter(
         (cri) => cri.field != action.field
       );
       criterionRemoved = true;
@@ -136,7 +133,7 @@ export function updateSortingCriteria(action) {
       existingCriterion.value = action.value;
     }
   } else {
-    state.criteria.sort.push({
+    state.criteria[action.name].push({
       field: action.field,
       value: action.value,
     });

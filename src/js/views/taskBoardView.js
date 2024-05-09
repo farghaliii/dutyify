@@ -1,6 +1,7 @@
 import "core-js/stable";
 
 import { makeDraggable, makeDroppable } from "../helpers";
+import { PRIORITY_HIGH, PRIORITY_LOW, PRIORITY_MEDIUM } from "../config";
 
 class TaskBoardView {
   _parentEl = document.querySelector(".board");
@@ -27,10 +28,16 @@ class TaskBoardView {
   }
 
   updateActionsUI(criteria) {
-    criteria.forEach((c) => {
-      this._dropmenuContentEl.querySelector(
+    criteria.forEach((c, index) => {
+      const radioInp = this._dropmenuContentEl.querySelector(
         `[data-action-field='${c.field}'][value='${c.value}']`
-      ).checked = true;
+      );
+
+      radioInp
+        .closest(".action-option")
+        .classList.add(`criterion-order--${index + 1}`);
+
+      radioInp.checked = true;
     });
   }
 
@@ -178,76 +185,105 @@ class TaskBoardView {
 
   _generateSortActionMarkup() {
     return `
-      <!-- Due Date -->
-      <div class="sort__options">
-        <div class="sort__option radio__group">
-          <input type="radio" data-action-name="sort" data-action-field="dueDate" name="sort-dueDate" id="sortDueDateASC" value="asc" class="radio__input">
-          <label for="sortDueDateASC" class="radio__label">
-            <span class="radio__btn"></span>
-            Date - Earliest First
-          </label>
-        </div>
-        <div class="sort__option radio__group">
-          <input type="radio" data-action-name="sort" data-action-field="dueDate" name="sort-dueDate" id="sortDueDateDESC" value="desc" class="radio__input">
-          <label for="sortDueDateDESC" class="radio__label">
-            <span class="radio__btn"></span>
-            Date - Latest First
-          </label>
-        </div>
+        <div class="sort__options">
+        <!-- Due date -->
+        <fieldset class="action-option">
+          <legend>Due Date</legend>
+          ${this._generateOptionRadioGroup({
+            actionName: "sort",
+            actionField: "dueDate",
+            actionValue: "asc",
+            actionLabel: "Earliest",
+          })}
+
+          ${this._generateOptionRadioGroup({
+            actionName: "sort",
+            actionField: "dueDate",
+            actionValue: "desc",
+            actionLabel: "Latest",
+          })}
+        </fieldset>
 
         <!-- Priority -->
-        <div class="sort__option radio__group">
-          <input type="radio" data-action-name="sort" data-action-field="priority" name="sort-priority" id="sortPriorityDESC" value="desc" class="radio__input">
-          <label for="sortPriorityDESC" class="radio__label">
-            <span class="radio__btn"></span>
-            Priority - High to Low
-          </label>
-        </div>
+        <fieldset class="action-option">
+          <legend>Priority</legend>
+          ${this._generateOptionRadioGroup({
+            actionName: "sort",
+            actionField: "priority",
+            actionValue: "asc",
+            actionLabel: "Low to High",
+          })}
 
-        <div class="sort__option radio__group">
-          <input type="radio" data-action-name="sort" data-action-field="priority" name="sort-priority" id="sortPriorityASC" value="asc" class="radio__input">
-          <label for="sortPriorityASC" class="radio__label">
-            <span class="radio__btn"></span>
-            Priority - Low to High
-          </label>
-        </div>
+          ${this._generateOptionRadioGroup({
+            actionName: "sort",
+            actionField: "priority",
+            actionValue: "desc",
+            actionLabel: "High to Low",
+          })}
+        </fieldset>
 
         <!-- Title -->
-        <div class="sort__option radio__group">
-          <input type="radio" data-action-name="sort" data-action-field="title" name="sort-title" id="sortTitleDESC" value="desc" class="radio__input">
-          <label for="sortTitleDESC" class="radio__label">
-            <span class="radio__btn"></span>
-            Title - Z to A
-          </label>
-        </div>
+        <fieldset class="action-option">
+          <legend>Title</legend>
+          ${this._generateOptionRadioGroup({
+            actionName: "sort",
+            actionField: "title",
+            actionValue: "asc",
+            actionLabel: "A - Z",
+          })}
 
-        <div class="sort__option radio__group">
-          <input type="radio" data-action-name="sort" data-action-field="title" name="sort-title" id="sortTitleASC" value="asc" class="radio__input">
-          <label for="sortTitleASC" class="radio__label">
-            <span class="radio__btn"></span>
-            Title - A to Z
-          </label>
-        </div>
-     </div>
+          ${this._generateOptionRadioGroup({
+            actionName: "sort",
+            actionField: "title",
+            actionValue: "desc",
+            actionLabel: "Z - A",
+          })}
+        </fieldset>
+      </div>
     `;
   }
   _generateFilterActionMarkup() {
     return `
       <div class="filter__options">
-        <div class="filter__option radio__group">
-          <input type="radio" name="filter" id="filterDueDateASC" value="asc" class="radio__input">
-          <label for="filterDueDateASC" class="radio__label">
-            <span class="radio__btn"></span>
-            Due Date: ASC
-          </label>
-        </div>
-        <div class="filter__option radio__group">
-          <input type="radio" name="filter" id="filterDueDateDESC" value="desc" class="radio__input">
-          <label for="filterDueDateDESC" class="radio__label">
-            <span class="radio__btn"></span>
-            Due Date: DESC
-          </label>
-        </div>
+        <!-- Priority -->
+        <fieldset class="action-option">
+          <legend>Priority</legend>
+
+          ${this._generateOptionRadioGroup({
+            actionName: "filter",
+            actionField: "priority",
+            actionValue: PRIORITY_LOW,
+            actionLabel: "Low",
+          })}
+
+          ${this._generateOptionRadioGroup({
+            actionName: "filter",
+            actionField: "priority",
+            actionValue: PRIORITY_MEDIUM,
+            actionLabel: "Medium",
+          })}
+
+          ${this._generateOptionRadioGroup({
+            actionName: "filter",
+            actionField: "priority",
+            actionValue: PRIORITY_HIGH,
+            actionLabel: "High",
+          })}
+        </fieldset>
+      </div>
+    `;
+  }
+
+  _generateOptionRadioGroup(data) {
+    const { actionName, actionField, actionValue, actionLabel } = data;
+    return `
+      <div class="radio__group">
+        <input type="radio" data-action-name="${actionName}" data-action-field="${actionField}" name="${actionName}-${actionField}"
+          id="${actionName}${actionField}${actionValue}" value="${actionValue}" class="radio__input">
+        <label for="${actionName}${actionField}${actionValue}" class="radio__label">
+          <span class="radio__btn"></span>
+          ${actionLabel}
+        </label>
       </div>
     `;
   }

@@ -9,8 +9,9 @@ import modalView from "./views/modalView.js";
 
 // Control displaying all tasks
 const displayTasks = function () {
-  // If there is sorting criteria will apply
-  const tasks = model.sortTasks(JSON.parse(JSON.stringify(model.state.tasks)));
+  // If there are criteria, they will be applied first
+  let tasks = model.filterTasks(JSON.parse(JSON.stringify(model.state.tasks)));
+  tasks = model.sortTasks(tasks);
   taskBoardView.render(tasks);
 };
 
@@ -121,18 +122,17 @@ const handleActions = function (action) {
   // Maybe in another situation I'll use 'cloneDeep' from lodash library.
   let tasks = JSON.parse(JSON.stringify(model.state.tasks));
 
-  if (action.name == "sort") {
-    const isCriterionRemoved = model.updateSortingCriteria(action);
-    tasks = model.sortTasks(tasks);
-    if (isCriterionRemoved) {
-      taskBoardView.uncheckActionBtn(action);
-    }
+  // TODO: -Fix: When remove criterion UI doesn't update
+  const isCriterionRemoved = model.updateCriteria(action);
+  if (isCriterionRemoved) {
+    taskBoardView.uncheckActionBtn(action);
   }
 
-  if (action.name == "filter") {
-  }
+  tasks = model.filterTasks(tasks);
+  tasks = model.sortTasks(tasks);
 
-  displayTasks(tasks);
+  taskBoardView.updateActionsUI(model.state.criteria[action.name]);
+  taskBoardView.render(tasks);
 };
 
 // Event Handlers
