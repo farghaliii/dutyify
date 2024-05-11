@@ -28,28 +28,40 @@ class TaskBoardView {
   }
 
   updateActionsUI(actionName, criteria) {
-    const radioInps = Array.from(
+    const checkboxInps = Array.from(
       this._dropmenuContentEl.querySelectorAll(
         `[data-action-name='${actionName}']`
       )
     );
-    0;
 
     // Uncheck all
-    radioInps.forEach((inp) => {
+    checkboxInps.forEach((inp) => {
       inp.checked = false;
       this._unHighlightActionOption(inp.closest(".action-option"));
     });
 
-    // Check current criteria
+    // Set current criteria
     criteria.forEach((c, index) => {
-      const radioInp = this._dropmenuContentEl.querySelector(
-        `[data-action-field='${c.field}'][value='${c.value}']`
-      );
-      radioInp.checked = true;
-      radioInp
-        .closest(".action-option")
-        .classList.add(`criterion-order--${index + 1}`);
+      if (actionName == "filter" && c.field == "dueDate") {
+        const inpStart = this._dropmenuContentEl.querySelector("#dueDateStart");
+        const inpEnd = this._dropmenuContentEl.querySelector("#dueDateEnd");
+        const startDate = c.value.split(",")[0];
+        const endDate = c.value.split(",")[1];
+        inpStart.value = startDate;
+        inpEnd.value = endDate;
+        inpStart
+          .closest(".action-option")
+          .classList.add(`criterion-order--${index + 1}`);
+      } else {
+        // In case of checkbox
+        const inp = this._dropmenuContentEl.querySelector(
+          `[data-action-field='${c.field}'][value='${c.value}']`
+        );
+        inp.checked = true;
+        inp
+          .closest(".action-option")
+          .classList.add(`criterion-order--${index + 1}`);
+      }
     });
   }
 
@@ -64,43 +76,63 @@ class TaskBoardView {
   }
 
   addHandlerActions(handler) {
+    // Handle toggle action's dropmenu
     this._boardHeaderEl.addEventListener("click", (e) => {
       const actionBtn = e.target.closest(".btn");
-      const radioInput = e.target.closest("input");
+      if (!actionBtn || actionBtn?.classList.contains("btn--add")) return;
 
-      if (
-        (!actionBtn && !radioInput) ||
-        actionBtn?.classList.contains("btn--add")
-      )
-        return;
+      this._displayActionOptions(actionBtn.dataset.actionName);
 
-      // For displaying action's aptions
-      if (actionBtn && !radioInput) {
-        this._displayActionOptions(actionBtn.dataset.actionName);
-        handler({
-          name: actionBtn.dataset.actionName,
-          isToggle: true,
-        });
+      handler({
+        name: actionBtn.dataset.actionName,
+        isToggle: true,
+      });
+    });
+
+    // Handle action itself
+    this._boardHeaderEl.addEventListener("change", (e) => {
+      const actionOptionEl = e.target.closest("fieldset");
+      const actionName = actionOptionEl.dataset.actionName;
+      const actionField = actionOptionEl.dataset.actionField;
+      let actionValue = e.target.value;
+
+      // In case of filtering based on the due date
+      if (actionName == "filter" && actionField == "dueDate") {
+        const inpStartDate = actionOptionEl.querySelector("#dueDateStart");
+        const inpEndDate = actionOptionEl.querySelector("#dueDateEnd");
+
+        // To be sure the user picks up the start and end dates
+        if (!inpStartDate.value.length || !inpEndDate.value.length) return;
+
+        const startDate = inpStartDate.value;
+        const endDate = inpEndDate.value;
+
+        // To check if the user picks up valid dates
+        if (new Date(startDate) > new Date(endDate)) {
+          // TODO: Handle this error
+          console.log("Invalid Dates");
+          return;
+        }
+        actionValue = `${startDate},${endDate}`;
       }
 
-      // For applying the action [sorting | filtering ..etc]
-      if (!actionBtn && radioInput)
-        handler({
-          name: radioInput.dataset.actionName,
-          field: radioInput.dataset.actionField,
-          value: radioInput.value,
-          isToggle: false,
-        });
+      handler({
+        name: actionName,
+        field: actionField,
+        value: actionValue,
+        isToggle: false,
+      });
     });
   }
 
   uncheckActionBtn(action) {
-    const radioInp = this._dropmenuContentEl.querySelector(
+    const checkboxInp = this._dropmenuContentEl.querySelector(
       `[data-action-field='${action.field}'][value='${action.value}']`
     );
-    radioInp.checked = false;
-    this._unHighlightActionOption(radioInp.closest(".action-option"));
+    checkboxInp.checked = false;
+    this._unHighlightActionOption(checkboxInp.closest(".action-option"));
   }
+
   _unHighlightActionOption(actionOption) {
     // Remove 'criterion-order--$'; class from the closest 'action-option' element
     const pattern = /criterion-order--\d+/;
@@ -212,7 +244,7 @@ class TaskBoardView {
     return `
         <div class="sort__options">
         <!-- Due date -->
-        <fieldset class="action-option">
+        <fieldset class="action-option" data-action-name="sort" data-action-field="dueDate">
           <legend>Due Date</legend>
           ${this._generateOptionRadioGroup({
             actionName: "sort",
@@ -230,7 +262,7 @@ class TaskBoardView {
         </fieldset>
 
         <!-- Priority -->
-        <fieldset class="action-option">
+        <fieldset class="action-option" data-action-name="sort" data-action-field="priority">
           <legend>Priority</legend>
           ${this._generateOptionRadioGroup({
             actionName: "sort",
@@ -248,7 +280,7 @@ class TaskBoardView {
         </fieldset>
 
         <!-- Title -->
-        <fieldset class="action-option">
+        <fieldset class="action-option" data-action-name="sort" data-action-field="title">
           <legend>Title</legend>
           ${this._generateOptionRadioGroup({
             actionName: "sort",
@@ -271,9 +303,8 @@ class TaskBoardView {
     return `
       <div class="filter__options">
         <!-- Priority -->
-        <fieldset class="action-option">
+        <fieldset class="action-option" data-action-name="filter" data-action-field="priority">
           <legend>Priority</legend>
-
           ${this._generateOptionRadioGroup({
             actionName: "filter",
             actionField: "priority",
@@ -295,6 +326,19 @@ class TaskBoardView {
             actionLabel: "High",
           })}
         </fieldset>
+
+        <!-- Due Date -->
+        <fieldset class="action-option" data-action-name="filter" data-action-field="dueDate">
+          <legend>Due Date</legend>
+          <div class="form__group">
+            <label for="dueDateStart">Start</label>
+            <input type="date" name="due-date-start" id="dueDateStart">
+          </div>
+          <div class="form__group">
+            <label for="dueDateEnd">End</label>
+            <input type="date" name="due-date-end" id="dueDateEnd">
+          </div>
+        </fieldset>
       </div>
     `;
   }
@@ -302,11 +346,11 @@ class TaskBoardView {
   _generateOptionRadioGroup(data) {
     const { actionName, actionField, actionValue, actionLabel } = data;
     return `
-      <div class="radio__group">
-        <input type="radio" data-action-name="${actionName}" data-action-field="${actionField}" name="${actionName}-${actionField}"
-          id="${actionName}${actionField}${actionValue}" value="${actionValue}" class="radio__input">
-        <label for="${actionName}${actionField}${actionValue}" class="radio__label">
-          <span class="radio__btn"></span>
+      <div>
+        <input type="checkbox" data-action-name="${actionName}" data-action-field="${actionField}" name="${actionName}-${actionField}"
+          id="${actionName}${actionField}${actionValue}" value="${actionValue}" class="checkbox__input">
+        <label for="${actionName}${actionField}${actionValue}" class="checkbox__label">
+          <span class="checkbox__btn"></span>
           ${actionLabel}
         </label>
       </div>

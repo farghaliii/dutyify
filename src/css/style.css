@@ -103,52 +103,82 @@ body {
   border-radius: 0.6rem;
 }
 
-.sort__options,
-.filter__options {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4.8rem;
-}
 .action-option {
   position: relative;
+  padding: 1.8rem 1.4rem;
+  border-radius: 0.2rem;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  line-height: 0;
+  border: 0.1rem solid #d1d1d1;
 }
+
 .action-option::before {
   position: absolute;
   top: -1.7rem;
   left: -0.91rem;
-  line-height: 0;
-  font-size: 1rem;
-  font-weight: 800;
-  color: #a71244;
-  background-color: #dfdfdf;
-  width: 1.8rem;
-  height: 1.8rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 1.8rem;
+  height: 1.8rem;
+
+  color: #a71244;
+  background-color: #dfdfdf;
+
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 0;
   border-radius: 50%;
 }
-
+.action-option legend {
+  font-size: inherit;
+  padding: 0.8rem;
+  font-weight: 600;
+}
 .action-option.criterion-order--1::before {
   content: "1" !important;
 }
-
 .action-option.criterion-order--2::before {
   content: "2" !important;
 }
 .action-option.criterion-order--3::before {
   content: "3" !important;
 }
+.action-option .form__group {
+  flex-direction: row;
+  align-items: center;
+}
+.action-option .form__group label {
+  font-size: inherit;
+}
+.action-option .form__group input {
+  font-size: inherit;
+  padding: 0.4rem 1.2rem;
+  color: #a71244;
+  font-weight: 500;
+}
 
-.radio__label {
+.sort__options,
+.filter__options {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 4.8rem;
+}
+
+.checkbox__label {
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.4rem;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: inherit;
 }
-.radio__btn {
+.checkbox__btn {
   position: relative;
   display: inline-block;
   width: 1.2rem;
@@ -156,8 +186,7 @@ body {
   border: 0.1rem solid #a71244;
   border-radius: 0.2rem;
 }
-
-.radio__btn::after {
+.checkbox__btn::after {
   content: "";
   width: 0.8rem;
   height: 0.8rem;
@@ -169,10 +198,10 @@ body {
   opacity: 0;
   transition: opacity 0.2s;
 }
-.radio__input {
+.checkbox__input {
   display: none;
 }
-.radio__input:checked + .radio__label .radio__btn::after {
+.checkbox__input:checked + .checkbox__label .checkbox__btn::after {
   opacity: 1;
 }
 
@@ -206,21 +235,6 @@ body {
 .btn--add:hover {
   background-color: #a71244;
   color: #fff;
-}
-
-fieldset {
-  padding: 1.8rem 1.4rem;
-  border-radius: 0.2rem;
-  font-size: rem;
-  display: flex;
-  gap: 1.2rem;
-  line-height: 0;
-  border: 0.1rem solid #d1d1d1;
-}
-
-legend {
-  font-size: 1.4rem;
-  padding: 0.8rem;
 }
 
 /* Board */

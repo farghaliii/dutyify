@@ -106,9 +106,20 @@ export function sortTasks(tasks) {
 export function filterTasks(tasks) {
   state.criteria.filter.forEach((criterion) => {
     for (const key in tasks) {
-      tasks[key] = tasks[key].filter(
-        (item) => item[criterion.field] == criterion.value
-      );
+      tasks[key] = tasks[key].filter((item) => {
+        if (criterion.field == "priority") {
+          return item[criterion.field] == criterion.value;
+        }
+        if (criterion.field == "dueDate") {
+          const taskDueDate = new Date(item[criterion.field]);
+          const startDate = new Date(criterion.value.split(",")[0]);
+          const endDate = new Date(criterion.value.split(",")[1]);
+          return taskDueDate >= startDate && taskDueDate <= endDate;
+        }
+        if (criterion.field == "keywords") {
+          return;
+        }
+      });
     }
   });
   return tasks;
