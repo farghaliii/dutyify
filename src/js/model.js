@@ -115,7 +115,6 @@ export function filterTasks(tasks) {
 }
 
 export function updateCriteria(action) {
-  console.log(action);
   let criterionRemoved = false;
 
   const existingCriterion = state.criteria[action.name].find(

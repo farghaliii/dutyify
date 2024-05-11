@@ -27,17 +27,29 @@ class TaskBoardView {
     this._generateMarkup();
   }
 
-  updateActionsUI(criteria) {
+  updateActionsUI(actionName, criteria) {
+    const radioInps = Array.from(
+      this._dropmenuContentEl.querySelectorAll(
+        `[data-action-name='${actionName}']`
+      )
+    );
+    0;
+
+    // Uncheck all
+    radioInps.forEach((inp) => {
+      inp.checked = false;
+      this._unHighlightActionOption(inp.closest(".action-option"));
+    });
+
+    // Check current criteria
     criteria.forEach((c, index) => {
       const radioInp = this._dropmenuContentEl.querySelector(
         `[data-action-field='${c.field}'][value='${c.value}']`
       );
-
+      radioInp.checked = true;
       radioInp
         .closest(".action-option")
         .classList.add(`criterion-order--${index + 1}`);
-
-      radioInp.checked = true;
     });
   }
 
@@ -65,7 +77,10 @@ class TaskBoardView {
       // For displaying action's aptions
       if (actionBtn && !radioInput) {
         this._displayActionOptions(actionBtn.dataset.actionName);
-        handler({ name: `toggle-action`, type: actionBtn.dataset.actionName });
+        handler({
+          name: actionBtn.dataset.actionName,
+          isToggle: true,
+        });
       }
 
       // For applying the action [sorting | filtering ..etc]
@@ -74,14 +89,24 @@ class TaskBoardView {
           name: radioInput.dataset.actionName,
           field: radioInput.dataset.actionField,
           value: radioInput.value,
+          isToggle: false,
         });
     });
   }
 
   uncheckActionBtn(action) {
-    this._dropmenuContentEl.querySelector(
+    const radioInp = this._dropmenuContentEl.querySelector(
       `[data-action-field='${action.field}'][value='${action.value}']`
-    ).checked = false;
+    );
+    radioInp.checked = false;
+    this._unHighlightActionOption(radioInp.closest(".action-option"));
+  }
+  _unHighlightActionOption(actionOption) {
+    // Remove 'criterion-order--$'; class from the closest 'action-option' element
+    const pattern = /criterion-order--\d+/;
+    let className = actionOption.className;
+    className = className.replace(pattern, "");
+    actionOption.className = className;
   }
 
   _generateMarkup() {

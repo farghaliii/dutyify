@@ -112,8 +112,11 @@ const updateTaskStatus = function (task) {
 
 // Control actions
 const handleActions = function (action) {
-  if (action.name == "toggle-action") {
-    taskBoardView.updateActionsUI(model.state.criteria[action.type]);
+  if (action.isToggle) {
+    taskBoardView.updateActionsUI(
+      action.name,
+      model.state.criteria[action.name]
+    );
     return;
   }
 
@@ -122,7 +125,6 @@ const handleActions = function (action) {
   // Maybe in another situation I'll use 'cloneDeep' from lodash library.
   let tasks = JSON.parse(JSON.stringify(model.state.tasks));
 
-  // TODO: -Fix: When remove criterion UI doesn't update
   const isCriterionRemoved = model.updateCriteria(action);
   if (isCriterionRemoved) {
     taskBoardView.uncheckActionBtn(action);
@@ -131,7 +133,7 @@ const handleActions = function (action) {
   tasks = model.filterTasks(tasks);
   tasks = model.sortTasks(tasks);
 
-  taskBoardView.updateActionsUI(model.state.criteria[action.name]);
+  taskBoardView.updateActionsUI(action.name, model.state.criteria[action.name]);
   taskBoardView.render(tasks);
 };
 
