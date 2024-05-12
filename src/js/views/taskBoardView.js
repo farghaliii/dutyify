@@ -79,6 +79,17 @@ class TaskBoardView {
     // Handle toggle action's dropmenu
     this._boardHeaderEl.addEventListener("click", (e) => {
       const actionBtn = e.target.closest(".btn");
+
+      if (actionBtn?.classList.contains("btn--clear-input")) {
+        handler({
+          name: actionBtn.parentElement.dataset.actionName,
+          field: actionBtn.parentElement.dataset.actionField,
+          value: "clear",
+          isToggle: false,
+        });
+        return;
+      }
+
       if (!actionBtn || actionBtn?.classList.contains("btn--add")) return;
 
       this._displayActionOptions(actionBtn.dataset.actionName);
@@ -126,11 +137,20 @@ class TaskBoardView {
   }
 
   uncheckActionBtn(action) {
-    const checkboxInp = this._dropmenuContentEl.querySelector(
-      `[data-action-field='${action.field}'][value='${action.value}']`
-    );
-    checkboxInp.checked = false;
-    this._unHighlightActionOption(checkboxInp.closest(".action-option"));
+    if (action.value == "clear") {
+      const inpParent = this._dropmenuContentEl.querySelector(
+        `[data-action-name='${action.name}'][data-action-field='${action.field}']`
+      );
+      const inps = inpParent.querySelectorAll("input");
+      inps.forEach((inp) => (inp.value = ""));
+      this._unHighlightActionOption(inpParent);
+    } else {
+      const inp = this._dropmenuContentEl.querySelector(
+        `[data-action-field='${action.field}'][value='${action.value}']`
+      );
+      inp.checked = false;
+      this._unHighlightActionOption(inp.closest(".action-option"));
+    }
   }
 
   _unHighlightActionOption(actionOption) {
@@ -338,11 +358,12 @@ class TaskBoardView {
             <label for="dueDateEnd">End</label>
             <input type="date" name="due-date-end" id="dueDateEnd">
           </div>
+
+          <button class="btn btn--clear-input">Clear</button>
         </fieldset>
       </div>
     `;
   }
-
   _generateOptionRadioGroup(data) {
     const { actionName, actionField, actionValue, actionLabel } = data;
     return `

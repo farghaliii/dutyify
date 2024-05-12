@@ -104,7 +104,7 @@ export function sortTasks(tasks) {
 }
 
 export function filterTasks(tasks) {
-  state.criteria.filter.forEach((criterion) => {
+  state.criteria.filter.forEach((criterion, indx) => {
     for (const key in tasks) {
       tasks[key] = tasks[key].filter((item) => {
         if (criterion.field == "priority") {
@@ -133,14 +133,24 @@ export function updateCriteria(action) {
   );
 
   if (existingCriterion) {
-    // If user click twise on the same criterion remove it from criteria
+    // If user click twice on the same criterion remove it from criteria
     if (existingCriterion.value == action.value) {
+      // For checkbox, radio inputs
       state.criteria[action.name] = state.criteria[action.name].filter(
         (cri) => cri.field != action.field
       );
       criterionRemoved = true;
     } else {
-      existingCriterion.value = action.value;
+      if (action.value == "clear") {
+        // For text, date ..etc inputs
+        state.criteria[action.name] = state.criteria[action.name].filter(
+          (cri) => cri.field != action.field
+        );
+        criterionRemoved = true;
+      } else {
+        // For checkbox, radio inputs
+        existingCriterion.value = action.value;
+      }
     }
   } else {
     state.criteria[action.name].push({

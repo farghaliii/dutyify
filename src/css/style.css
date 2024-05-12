@@ -215,7 +215,7 @@ body {
   font-size: 1.4rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in-out;
 }
 .btn__icon {
   width: 2.4rem;
@@ -236,7 +236,16 @@ body {
   background-color: #a71244;
   color: #fff;
 }
-
+.btn--clear-input {
+  font-size: inherit;
+  border: 0.1rem solid #444;
+  padding: 0.4rem 1.2rem;
+  border-radius: 0.6rem;
+}
+.btn--clear-input:hover {
+  color: #fafafa;
+  background-color: #444;
+}
 /* Board */
 .board {
   display: grid;

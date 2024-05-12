@@ -120,8 +120,6 @@ const handleActions = function (action) {
     return;
   }
 
-  console.log(action);
-
   // Deep cloning the tasks objects
   // [This isn't the best way to clone an object deeply BUT it works fine here.]
   // Maybe in another situation I'll use 'cloneDeep' from lodash library.
@@ -129,10 +127,12 @@ const handleActions = function (action) {
 
   const isCriterionRemoved = model.updateCriteria(action);
   if (isCriterionRemoved) {
+    console.log(isCriterionRemoved, action);
     taskBoardView.uncheckActionBtn(action);
   }
 
   tasks = model.filterTasks(tasks);
+
   tasks = model.sortTasks(tasks);
 
   taskBoardView.updateActionsUI(action.name, model.state.criteria[action.name]);
