@@ -162,11 +162,43 @@ body {
   color: #a71244;
   font-weight: 500;
 }
+.action-option__keywords {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 0.8rem;
+}
+.action-option__keywords-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(max-content, 1fr));
+  gap: 0.8rem;
+}
+
+.action-option__keywords-container .task__keyword {
+  position: relative;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 1.2rem 2rem 1.2rem 1.2rem;
+}
+
+.btn-delete-keyword {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background-color: #a71244;
+  color: #fafafa;
+  font-size: inherit;
+  padding: 0 0.4rem;
+  border: none;
+  cursor: pointer;
+}
 
 .sort__options,
 .filter__options {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   gap: 4.8rem;
 }
@@ -364,10 +396,11 @@ body {
 }
 .task__keyword {
   background-color: #efefef;
-  padding: 0.1rem 0.4rem;
+  padding: 1rem 0.4rem;
   text-transform: capitalize;
   color: #222222;
   border-radius: 0.2rem;
+  line-height: 0;
 }
 
 .task--opened {

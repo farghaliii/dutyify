@@ -110,14 +110,25 @@ export function filterTasks(tasks) {
         if (criterion.field == "priority") {
           return item[criterion.field] == criterion.value;
         }
+
         if (criterion.field == "dueDate") {
           const taskDueDate = new Date(item[criterion.field]);
           const startDate = new Date(criterion.value.split(",")[0]);
           const endDate = new Date(criterion.value.split(",")[1]);
           return taskDueDate >= startDate && taskDueDate <= endDate;
         }
+
         if (criterion.field == "keywords") {
-          return;
+          let flag = false;
+          const keywords = criterion.value.split(",");
+          keywords.forEach((keyword) => {
+            item[criterion.field].forEach((k) => {
+              if (k.toLowerCase() == keyword.toLowerCase()) {
+                flag = true;
+              }
+            });
+          });
+          return flag;
         }
       });
     }
@@ -127,26 +138,28 @@ export function filterTasks(tasks) {
 
 export function updateCriteria(action) {
   let criterionRemoved = false;
-
   const existingCriterion = state.criteria[action.name].find(
     (criterion) => criterion.field === action.field
   );
 
   if (existingCriterion) {
     // If user click twice on the same criterion remove it from criteria
-    if (existingCriterion.value == action.value) {
+    if (existingCriterion.value == action.value && action.field != "keywords") {
       // For checkbox, radio inputs
       state.criteria[action.name] = state.criteria[action.name].filter(
         (cri) => cri.field != action.field
       );
       criterionRemoved = true;
     } else {
-      if (action.value == "clear") {
-        // For text, date ..etc inputs
+      if (action.field == "dueDate") {
+        // Update due date filter
         state.criteria[action.name] = state.criteria[action.name].filter(
           (cri) => cri.field != action.field
         );
         criterionRemoved = true;
+      } else if (action.field == "keywords") {
+        // Update keywords filter
+        existingCriterion.value += `,${action.value}`;
       } else {
         // For checkbox, radio inputs
         existingCriterion.value = action.value;

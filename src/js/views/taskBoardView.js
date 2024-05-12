@@ -52,6 +52,27 @@ class TaskBoardView {
         inpStart
           .closest(".action-option")
           .classList.add(`criterion-order--${index + 1}`);
+      } else if (actionName == "filter" && c.field == "keywords") {
+        const inp = this._dropmenuContentEl.querySelector("#keywords");
+        const keywordsEl = inp
+          .closest(".action-option__keywords")
+          .querySelector(".action-option__keywords-container");
+        let keywordsMarkup = ``;
+        c.value.split(",").forEach((keyword) => {
+          keywordsMarkup += `
+            <span class="task__keyword" data-keyword="${keyword}">
+              ${keyword}
+              <button class="btn-delete-keyword">&#x2715;</button>
+            </span>
+          `;
+        });
+        inp.value = "";
+        keywordsEl.innerHTML = "";
+        keywordsEl.insertAdjacentHTML("afterbegin", keywordsMarkup);
+
+        inp
+          .closest(".action-option")
+          .classList.add(`criterion-order--${index + 1}`);
       } else {
         // In case of checkbox
         const inp = this._dropmenuContentEl.querySelector(
@@ -80,17 +101,27 @@ class TaskBoardView {
     this._boardHeaderEl.addEventListener("click", (e) => {
       const actionBtn = e.target.closest(".btn");
 
-      if (actionBtn?.classList.contains("btn--clear-input")) {
+      if (!actionBtn || actionBtn?.classList.contains("btn--add")) return;
+
+      if (actionBtn.classList.contains("btn--clear-input")) {
+        const actionOptionEl = actionBtn.closest(".action-option");
+
+        if (actionOptionEl.dataset.actionField == "dueDate") {
+          const inpStartDate = actionOptionEl.querySelector("#dueDateStart");
+          const inpEndDate = actionOptionEl.querySelector("#dueDateEnd");
+          if (!inpStartDate.value.length || !inpEndDate.value.length) return;
+        }
+
+        if (actionOptionEl.querySelector("input").value == "") return;
+
         handler({
-          name: actionBtn.parentElement.dataset.actionName,
-          field: actionBtn.parentElement.dataset.actionField,
+          name: actionOptionEl.dataset.actionName,
+          field: actionOptionEl.dataset.actionField,
           value: "clear",
           isToggle: false,
         });
         return;
       }
-
-      if (!actionBtn || actionBtn?.classList.contains("btn--add")) return;
 
       this._displayActionOptions(actionBtn.dataset.actionName);
 
@@ -102,6 +133,8 @@ class TaskBoardView {
 
     // Handle action itself
     this._boardHeaderEl.addEventListener("change", (e) => {
+      // Except keywords filter action
+      if (e.target.name == "keywords") return;
       const actionOptionEl = e.target.closest("fieldset");
       const actionName = actionOptionEl.dataset.actionName;
       const actionField = actionOptionEl.dataset.actionField;
@@ -134,10 +167,31 @@ class TaskBoardView {
         isToggle: false,
       });
     });
+
+    this._boardHeaderEl.addEventListener("keydown", (e) => {
+      if (e.code != "Enter") return;
+      if (!e.target.value) {
+        console.log("Empty String");
+        return;
+      }
+      const actionOptionEl = e.target.closest("fieldset");
+      const actionName = actionOptionEl.dataset.actionName;
+      const actionField = actionOptionEl.dataset.actionField;
+      const actionValue = e.target.value;
+      e.target.value = "";
+
+      handler({
+        name: actionName,
+        field: actionField,
+        value: actionValue,
+        isToggle: false,
+      });
+    });
   }
 
   uncheckActionBtn(action) {
-    if (action.value == "clear") {
+    console.log(action);
+    if (action.value == "clear" || action.field == "keywords") {
       const inpParent = this._dropmenuContentEl.querySelector(
         `[data-action-name='${action.name}'][data-action-field='${action.field}']`
       );
@@ -322,6 +376,34 @@ class TaskBoardView {
   _generateFilterActionMarkup() {
     return `
       <div class="filter__options">
+        <!-- Keywords -->
+        <fieldset class="action-option" data-action-name="filter" data-action-field="keywords">
+          <legend>keywords</legend>
+            <div class="action-option__keywords">
+            <div class="form__group">            
+              <div class="form__group">
+              <input type="text" name="keywords" id="keywords">
+              </div>
+              <button class="btn btn--clear-input">Clear</button>
+            </div>
+            <div class="action-option__keywords-container"></div>
+          </div>
+        </fieldset>
+
+        <!-- Due Date -->
+        <fieldset class="action-option" data-action-name="filter" data-action-field="dueDate">
+          <legend>Due Date</legend>
+          <div class="form__group">
+            <label for="dueDateStart">Start</label>
+            <input type="date" name="due-date-start" id="dueDateStart">
+          </div>
+          <div class="form__group">
+            <label for="dueDateEnd">End</label>
+            <input type="date" name="due-date-end" id="dueDateEnd">
+          </div>
+          <button class="btn btn--clear-input">Clear</button>
+        </fieldset>
+
         <!-- Priority -->
         <fieldset class="action-option" data-action-name="filter" data-action-field="priority">
           <legend>Priority</legend>
@@ -345,21 +427,6 @@ class TaskBoardView {
             actionValue: PRIORITY_HIGH,
             actionLabel: "High",
           })}
-        </fieldset>
-
-        <!-- Due Date -->
-        <fieldset class="action-option" data-action-name="filter" data-action-field="dueDate">
-          <legend>Due Date</legend>
-          <div class="form__group">
-            <label for="dueDateStart">Start</label>
-            <input type="date" name="due-date-start" id="dueDateStart">
-          </div>
-          <div class="form__group">
-            <label for="dueDateEnd">End</label>
-            <input type="date" name="due-date-end" id="dueDateEnd">
-          </div>
-
-          <button class="btn btn--clear-input">Clear</button>
         </fieldset>
       </div>
     `;
