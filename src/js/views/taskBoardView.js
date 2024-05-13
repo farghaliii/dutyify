@@ -27,65 +27,6 @@ class TaskBoardView {
     this._generateMarkup();
   }
 
-  updateActionsUI(actionName, criteria) {
-    const checkboxInps = Array.from(
-      this._dropmenuContentEl.querySelectorAll(
-        `[data-action-name='${actionName}']`
-      )
-    );
-
-    // Uncheck all
-    checkboxInps.forEach((inp) => {
-      inp.checked = false;
-      this._unHighlightActionOption(inp.closest(".action-option"));
-    });
-
-    // Set current criteria
-    criteria.forEach((c, index) => {
-      if (actionName == "filter" && c.field == "dueDate") {
-        const inpStart = this._dropmenuContentEl.querySelector("#dueDateStart");
-        const inpEnd = this._dropmenuContentEl.querySelector("#dueDateEnd");
-        const startDate = c.value.split(",")[0];
-        const endDate = c.value.split(",")[1];
-        inpStart.value = startDate;
-        inpEnd.value = endDate;
-        inpStart
-          .closest(".action-option")
-          .classList.add(`criterion-order--${index + 1}`);
-      } else if (actionName == "filter" && c.field == "keywords") {
-        const inp = this._dropmenuContentEl.querySelector("#keywords");
-        const keywordsEl = inp
-          .closest(".action-option__keywords")
-          .querySelector(".action-option__keywords-container");
-        let keywordsMarkup = ``;
-        c.value.split(",").forEach((keyword) => {
-          keywordsMarkup += `
-            <span class="task__keyword" data-keyword="${keyword}">
-              ${keyword}
-              <button class="btn-delete-keyword">&#x2715;</button>
-            </span>
-          `;
-        });
-        inp.value = "";
-        keywordsEl.innerHTML = "";
-        keywordsEl.insertAdjacentHTML("afterbegin", keywordsMarkup);
-
-        inp
-          .closest(".action-option")
-          .classList.add(`criterion-order--${index + 1}`);
-      } else {
-        // In case of checkbox
-        const inp = this._dropmenuContentEl.querySelector(
-          `[data-action-field='${c.field}'][value='${c.value}']`
-        );
-        inp.checked = true;
-        inp
-          .closest(".action-option")
-          .classList.add(`criterion-order--${index + 1}`);
-      }
-    });
-  }
-
   addHandlerRender(handler) {
     handler();
   }
@@ -112,7 +53,11 @@ class TaskBoardView {
           if (!inpStartDate.value.length || !inpEndDate.value.length) return;
         }
 
-        if (actionOptionEl.querySelector("input").value == "") return;
+        if (
+          actionOptionEl.querySelector("input").value == "" &&
+          actionOptionEl.dataset.actionField != "keywords"
+        )
+          return;
 
         handler({
           name: actionOptionEl.dataset.actionName,
@@ -122,6 +67,22 @@ class TaskBoardView {
         });
         return;
       }
+
+      if (actionBtn.classList.contains("btn--delete-keyword")) {
+        const actionOptionEl = actionBtn.closest(".action-option");
+        const deleteKeyword =
+          actionBtn.closest(".task__keyword").dataset.keyword;
+
+        handler({
+          name: actionOptionEl.dataset.actionName,
+          field: actionOptionEl.dataset.actionField,
+          value: deleteKeyword,
+          isDeleteOneKeyword: true,
+          isToggle: false,
+        });
+      }
+
+      if (!actionBtn.dataset.actionName) return;
 
       this._displayActionOptions(actionBtn.dataset.actionName);
 
@@ -189,14 +150,88 @@ class TaskBoardView {
     });
   }
 
+  updateActionsUI(actionName, criteria) {
+    // Checkboxes
+    const checkboxInps = Array.from(
+      this._dropmenuContentEl.querySelectorAll(
+        `[data-action-name='${actionName}']`
+      )
+    );
+    // Uncheck all
+    checkboxInps.forEach((inp) => {
+      inp.checked = false;
+      this._unHighlightActionOption(inp.closest(".action-option"));
+    });
+
+    if (actionName == "filter") {
+      // Keywords container
+      const keywordsEl = this._dropmenuContentEl.querySelector(
+        ".action-option__keywords-container"
+      );
+      keywordsEl.innerHTML = "";
+    }
+
+    // Set current criteria
+    criteria.forEach((c, index) => {
+      if (actionName == "filter" && c.field == "dueDate") {
+        const inpStart = this._dropmenuContentEl.querySelector("#dueDateStart");
+        const inpEnd = this._dropmenuContentEl.querySelector("#dueDateEnd");
+        const startDate = c.value.split(",")[0];
+        const endDate = c.value.split(",")[1];
+        inpStart.value = startDate;
+        inpEnd.value = endDate;
+        inpStart
+          .closest(".action-option")
+          .classList.add(`criterion-order--${index + 1}`);
+      } else if (actionName == "filter" && c.field == "keywords") {
+        const inp = this._dropmenuContentEl.querySelector("#keywords");
+        let keywordsMarkup = ``;
+        c.value.split(",").forEach((keyword) => {
+          keywordsMarkup += `
+            <span class="task__keyword" data-keyword="${keyword}">
+              ${keyword}
+              <button class="btn btn--delete-keyword">&#x2715;</button>
+            </span>
+          `;
+        });
+        const keywordsEl = this._dropmenuContentEl.querySelector(
+          ".action-option__keywords-container"
+        );
+        keywordsEl.innerHTML = "";
+        inp.value = "";
+        keywordsEl.insertAdjacentHTML("afterbegin", keywordsMarkup);
+        inp
+          .closest(".action-option")
+          .classList.add(`criterion-order--${index + 1}`);
+      } else {
+        // In case of checkbox
+        const inp = this._dropmenuContentEl.querySelector(
+          `[data-action-field='${c.field}'][value='${c.value}']`
+        );
+        inp.checked = true;
+        inp
+          .closest(".action-option")
+          .classList.add(`criterion-order--${index + 1}`);
+      }
+    });
+  }
+
   uncheckActionBtn(action) {
-    console.log(action);
-    if (action.value == "clear" || action.field == "keywords") {
+    if (action.value == "clear") {
       const inpParent = this._dropmenuContentEl.querySelector(
         `[data-action-name='${action.name}'][data-action-field='${action.field}']`
       );
+
       const inps = inpParent.querySelectorAll("input");
       inps.forEach((inp) => (inp.value = ""));
+
+      if (action.field == "keywords") {
+        const el = inpParent.querySelector(
+          ".action-option__keywords-container"
+        );
+        el.innerHTML = "";
+      }
+
       this._unHighlightActionOption(inpParent);
     } else {
       const inp = this._dropmenuContentEl.querySelector(
@@ -380,7 +415,7 @@ class TaskBoardView {
         <fieldset class="action-option" data-action-name="filter" data-action-field="keywords">
           <legend>keywords</legend>
             <div class="action-option__keywords">
-            <div class="form__group">            
+            <div class="action-option__inputs">            
               <div class="form__group">
               <input type="text" name="keywords" id="keywords">
               </div>

@@ -136,6 +136,25 @@ export function filterTasks(tasks) {
   return tasks;
 }
 
+export function deleteFilterKeyword(keyword) {
+  state.criteria["filter"].forEach((filter) => {
+    if (filter.field == "keywords") {
+      let keywords = filter.value.split(",");
+      keywords = keywords.filter((k) => k != keyword);
+      if (keywords.length == 0) {
+        criterionIndx = state.criteria["filter"].findIndex(
+          (f) => f.field == "keywords"
+        );
+        state.criteria["filter"].splice(criterionIndx, 1);
+      } else {
+        filter.value = keywords.join(",");
+      }
+    }
+  });
+  // Update persistent data
+  storeData(state);
+}
+
 export function updateCriteria(action) {
   let criterionRemoved = false;
   const existingCriterion = state.criteria[action.name].find(
@@ -151,15 +170,24 @@ export function updateCriteria(action) {
       );
       criterionRemoved = true;
     } else {
-      if (action.field == "dueDate") {
+      if (action.name == "filter" && action.field == "dueDate") {
         // Update due date filter
         state.criteria[action.name] = state.criteria[action.name].filter(
           (cri) => cri.field != action.field
         );
         criterionRemoved = true;
       } else if (action.field == "keywords") {
-        // Update keywords filter
-        existingCriterion.value += `,${action.value}`;
+        if (action.value != "clear") {
+          // Update keywords filter
+          existingCriterion.value += `,${action.value}`;
+        } else {
+          // Delete keywords filter
+          const i = state.criteria[action.name].findIndex(
+            (cri) => cri.field == action.field
+          );
+          state.criteria[action.name].splice(i, 1);
+          criterionRemoved = true;
+        }
       } else {
         // For checkbox, radio inputs
         existingCriterion.value = action.value;
@@ -173,7 +201,6 @@ export function updateCriteria(action) {
   }
 
   storeData(state);
-
   return criterionRemoved;
 }
 

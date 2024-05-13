@@ -125,14 +125,16 @@ const handleActions = function (action) {
   // Maybe in another situation I'll use 'cloneDeep' from lodash library.
   let tasks = JSON.parse(JSON.stringify(model.state.tasks));
 
-  const isCriterionRemoved = model.updateCriteria(action);
-  if (isCriterionRemoved) {
-    console.log(isCriterionRemoved, action);
-    taskBoardView.uncheckActionBtn(action);
+  if (!action.isDeleteOneKeyword) {
+    const isCriterionRemoved = model.updateCriteria(action);
+    if (isCriterionRemoved) {
+      taskBoardView.uncheckActionBtn(action);
+    }
+  } else {
+    model.deleteFilterKeyword(action.value);
   }
 
   tasks = model.filterTasks(tasks);
-
   tasks = model.sortTasks(tasks);
 
   taskBoardView.updateActionsUI(action.name, model.state.criteria[action.name]);
