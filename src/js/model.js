@@ -76,7 +76,7 @@ export function sortTasks(tasks) {
     tasks[key].sort((a, b) => {
       let val = 0;
       //  To make sorting be based on the criterion and its order
-      for (const criterion of state.criteria.sort) {
+      for (const criterion of state.actions.sort) {
         const { field, value } = criterion;
         const aVal = a[field];
         const bVal = b[field];
@@ -104,7 +104,7 @@ export function sortTasks(tasks) {
 }
 
 export function filterTasks(tasks) {
-  state.criteria.filter.forEach((criterion, indx) => {
+  state.actions.filter.forEach((criterion) => {
     for (const key in tasks) {
       tasks[key] = tasks[key].filter((item) => {
         if (criterion.field == "priority") {
@@ -137,15 +137,15 @@ export function filterTasks(tasks) {
 }
 
 export function deleteFilterKeyword(keyword) {
-  state.criteria["filter"].forEach((filter) => {
+  state.actions["filter"].forEach((filter) => {
     if (filter.field == "keywords") {
       let keywords = filter.value.split(",");
       keywords = keywords.filter((k) => k != keyword);
       if (keywords.length == 0) {
-        criterionIndx = state.criteria["filter"].findIndex(
+        criterionIndx = state.actions["filter"].findIndex(
           (f) => f.field == "keywords"
         );
-        state.criteria["filter"].splice(criterionIndx, 1);
+        state.actions["filter"].splice(criterionIndx, 1);
       } else {
         filter.value = keywords.join(",");
       }
@@ -157,44 +157,50 @@ export function deleteFilterKeyword(keyword) {
 
 export function updateCriteria(action) {
   let criterionRemoved = false;
-  const existingCriterion = state.criteria[action.name].find(
+
+  // Get the criterion if already exist
+  const existingCriterion = state.actions[action.name].find(
     (criterion) => criterion.field === action.field
   );
 
+  // Handle the existing criterion
   if (existingCriterion) {
     // If user click twice on the same criterion remove it from criteria
+    // For checkbox or radio criteria
     if (existingCriterion.value == action.value && action.field != "keywords") {
-      // For checkbox, radio inputs
-      state.criteria[action.name] = state.criteria[action.name].filter(
-        (cri) => cri.field != action.field
-      );
-      criterionRemoved = true;
-    } else {
-      if (action.name == "filter" && action.field == "dueDate") {
-        // Update due date filter
-        state.criteria[action.name] = state.criteria[action.name].filter(
-          (cri) => cri.field != action.field
-        );
-        criterionRemoved = true;
-      } else if (action.field == "keywords") {
-        if (action.value != "clear") {
-          // Update keywords filter
-          existingCriterion.value += `,${action.value}`;
-        } else {
-          // Delete keywords filter
-          const i = state.criteria[action.name].findIndex(
-            (cri) => cri.field == action.field
-          );
-          state.criteria[action.name].splice(i, 1);
-          criterionRemoved = true;
+      criterionRemoved = removeActionCriterion(action.name, action.field);
+    }
+
+    // Handle other criteria's input
+    if (existingCriterion.value != action.value) {
+      if (
+        action.name == "filter" &&
+        (action.field == "dueDate" || action.field == "keywords")
+      ) {
+        // Remove filter's criterion
+        if (action.value == "clear") {
+          criterionRemoved = removeActionCriterion(action.name, action.field);
         }
-      } else {
-        // For checkbox, radio inputs
+
+        // Update filter's criterion
+        if (action.value != "clear") {
+          existingCriterion.value =
+            action.field == "dueDate"
+              ? action.value
+              : existingCriterion.value + `,${action.value}`;
+        }
+      }
+      // For checkbox or radio criteria but with different value
+      // So update the current value instead of remove the criterion
+      if (action.name == "sort" || action.field == "priority") {
         existingCriterion.value = action.value;
       }
     }
-  } else {
-    state.criteria[action.name].push({
+  }
+
+  // Adding new criterion
+  if (!existingCriterion) {
+    state.actions[action.name].push({
       field: action.field,
       value: action.value,
     });
@@ -204,6 +210,12 @@ export function updateCriteria(action) {
   return criterionRemoved;
 }
 
+function removeActionCriterion(actionName, actionField) {
+  state.actions[actionName] = state.actions[actionName].filter(
+    (cri) => cri.field != actionField
+  );
+  return true;
+}
 function generateTaskId() {
   // Generate random id consists of 6 chrachters
   return randomId(6);
@@ -463,7 +475,7 @@ function storeData(data = undefined) {
         ],
       },
 
-      criteria: { sort: [], filter: [] },
+      actions: { sort: [], filter: [] },
 
       categories: [
         { id: "general", name: "general" },

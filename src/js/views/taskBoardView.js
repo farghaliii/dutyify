@@ -38,115 +38,152 @@ class TaskBoardView {
   }
 
   addHandlerActions(handler) {
-    // Handle toggle action's dropmenu
-    this._boardHeaderEl.addEventListener("click", (e) => {
-      const actionBtn = e.target.closest(".btn");
+    const handleClick = (e) => {
+      const btn = e.target.closest(".btn");
+      if (!btn) return;
+      this._handleClickedBtn(btn, handler);
+    };
 
-      if (!actionBtn || actionBtn?.classList.contains("btn--add")) return;
+    const handleChange = (e) => {
+      const input = e.target;
+      this._handleChangedInput(input, handler);
+    };
 
-      if (actionBtn.classList.contains("btn--clear-input")) {
-        const actionOptionEl = actionBtn.closest(".action-option");
-
-        if (actionOptionEl.dataset.actionField == "dueDate") {
-          const inpStartDate = actionOptionEl.querySelector("#dueDateStart");
-          const inpEndDate = actionOptionEl.querySelector("#dueDateEnd");
-          if (!inpStartDate.value.length || !inpEndDate.value.length) return;
-        }
-
-        if (
-          actionOptionEl.querySelector("input").value == "" &&
-          actionOptionEl.dataset.actionField != "keywords"
-        )
-          return;
-
-        handler({
-          name: actionOptionEl.dataset.actionName,
-          field: actionOptionEl.dataset.actionField,
-          value: "clear",
-          isToggle: false,
-        });
-        return;
+    const handleKeydown = (e) => {
+      if (e.code === "Enter") {
+        this._handleEnterKey(e.target, handler);
       }
+    };
 
-      if (actionBtn.classList.contains("btn--delete-keyword")) {
-        const actionOptionEl = actionBtn.closest(".action-option");
-        const deleteKeyword =
-          actionBtn.closest(".task__keyword").dataset.keyword;
+    this._boardHeaderEl.addEventListener("click", handleClick);
+    this._boardHeaderEl.addEventListener("change", handleChange);
+    this._boardHeaderEl.addEventListener("keydown", handleKeydown);
+  }
 
-        handler({
-          name: actionOptionEl.dataset.actionName,
-          field: actionOptionEl.dataset.actionField,
-          value: deleteKeyword,
-          isDeleteOneKeyword: true,
-          isToggle: false,
-        });
-      }
+  _handleClickedBtn(btn, handler) {
+    if (btn.classList.contains("btn--add")) return;
 
-      if (!actionBtn.dataset.actionName) return;
+    const actionOptionEl = btn.closest(".action-option");
+    const actionField = actionOptionEl?.dataset.actionField;
+    const actionName = actionOptionEl
+      ? actionOptionEl.dataset.actionName
+      : btn.dataset.actionName;
 
-      this._displayActionOptions(actionBtn.dataset.actionName);
-
-      handler({
-        name: actionBtn.dataset.actionName,
-        isToggle: true,
-      });
-    });
-
-    // Handle action itself
-    this._boardHeaderEl.addEventListener("change", (e) => {
-      // Except keywords filter action
-      if (e.target.name == "keywords") return;
-      const actionOptionEl = e.target.closest("fieldset");
-      const actionName = actionOptionEl.dataset.actionName;
-      const actionField = actionOptionEl.dataset.actionField;
-      let actionValue = e.target.value;
-
-      // In case of filtering based on the due date
-      if (actionName == "filter" && actionField == "dueDate") {
+    // Clear input
+    if (btn.classList.contains("btn--clear-input")) {
+      // Clear due date inputs
+      if (actionField == "dueDate") {
         const inpStartDate = actionOptionEl.querySelector("#dueDateStart");
         const inpEndDate = actionOptionEl.querySelector("#dueDateEnd");
-
-        // To be sure the user picks up the start and end dates
-        if (!inpStartDate.value.length || !inpEndDate.value.length) return;
-
         const startDate = inpStartDate.value;
         const endDate = inpEndDate.value;
 
-        // To check if the user picks up valid dates
-        if (new Date(startDate) > new Date(endDate)) {
-          // TODO: Handle this error
-          console.log("Invalid Dates");
+        if (
+          !startDate.length ||
+          !endDate.length ||
+          new Date(startDate) > new Date(endDate)
+        ) {
+          inpStartDate.value = "";
+          inpEndDate.value = "";
           return;
         }
-        actionValue = `${startDate},${endDate}`;
+      }
+
+      // Clear keywords input
+      if (actionField == "keywords") {
+        // If the input has a text and the user clicked clear
+        btn.closest(".action-option__inputs").querySelector("input").value = "";
+        // If the user clicked clear and there are no keywords
+        if (!actionOptionEl.querySelector(".task__keyword")) return;
       }
 
       handler({
         name: actionName,
         field: actionField,
-        value: actionValue,
+        value: "clear",
         isToggle: false,
       });
-    });
 
-    this._boardHeaderEl.addEventListener("keydown", (e) => {
-      if (e.code != "Enter") return;
-      if (!e.target.value) {
-        console.log("Empty String");
+      return;
+    }
+
+    // Delete keyword
+    if (btn.classList.contains("btn--delete-keyword")) {
+      const deleteKeyword = btn.closest(".task__keyword").dataset.keyword;
+      handler({
+        name: actionName,
+        field: actionField,
+        value: deleteKeyword,
+        isDeleteOneKeyword: true,
+        isToggle: false,
+      });
+      return;
+    }
+
+    // Handle toggling dropdown menu with an action's options
+    this._displayActionOptions(actionName);
+    handler({
+      name: actionName,
+      isToggle: true,
+    });
+  }
+
+  _handleChangedInput(input, handler) {
+    // Except keywords input in the filter action
+    if (input.name == "keywords") return;
+
+    const actionOptionEl = input.closest(".action-option");
+    const actionName = actionOptionEl.dataset.actionName;
+    const actionField = actionOptionEl.dataset.actionField;
+
+    // In general cases [Only one (input | select | textarea) filed]
+    let actionValue = input.value;
+
+    // In case of filtering based on the due date
+    // [Exception because the due date filed in filtering has 2 inputs]
+    if (actionName == "filter" && actionField == "dueDate") {
+      const inpStartDate = actionOptionEl.querySelector("#dueDateStart");
+      const inpEndDate = actionOptionEl.querySelector("#dueDateEnd");
+
+      // To be sure the user picks up the start and end dates
+      if (!inpStartDate.value.length || !inpEndDate.value.length) return;
+
+      const startDate = inpStartDate.value;
+      const endDate = inpEndDate.value;
+
+      // To check if the user picks up valid dates
+      if (new Date(startDate) > new Date(endDate)) {
+        // TODO: Handle this error
+        console.log("Invalid Dates");
         return;
       }
-      const actionOptionEl = e.target.closest("fieldset");
-      const actionName = actionOptionEl.dataset.actionName;
-      const actionField = actionOptionEl.dataset.actionField;
-      const actionValue = e.target.value;
-      e.target.value = "";
+      actionValue = `${startDate},${endDate}`;
+    }
 
-      handler({
-        name: actionName,
-        field: actionField,
-        value: actionValue,
-        isToggle: false,
-      });
+    handler({
+      name: actionName,
+      field: actionField,
+      value: actionValue,
+      isToggle: false,
+    });
+  }
+
+  _handleEnterKey(input, handler) {
+    if (!input.value) return;
+
+    const actionOptionEl = input.closest("fieldset");
+    const actionName = actionOptionEl.dataset.actionName;
+    const actionField = actionOptionEl.dataset.actionField;
+    const actionValue = input.value;
+
+    // Clear input filed
+    input.value = "";
+
+    handler({
+      name: actionName,
+      field: actionField,
+      value: actionValue,
+      isToggle: false,
     });
   }
 
@@ -216,8 +253,8 @@ class TaskBoardView {
     });
   }
 
-  uncheckActionBtn(action) {
-    if (action.value == "clear") {
+  resetActionInputs(action) {
+    if (action.field == "dueDate" || action.field == "keywords") {
       const inpParent = this._dropmenuContentEl.querySelector(
         `[data-action-name='${action.name}'][data-action-field='${action.field}']`
       );
@@ -234,6 +271,7 @@ class TaskBoardView {
 
       this._unHighlightActionOption(inpParent);
     } else {
+      // In case of checkbox or radio
       const inp = this._dropmenuContentEl.querySelector(
         `[data-action-field='${action.field}'][value='${action.value}']`
       );

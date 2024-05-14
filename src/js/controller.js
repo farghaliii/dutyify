@@ -115,7 +115,7 @@ const handleActions = function (action) {
   if (action.isToggle) {
     taskBoardView.updateActionsUI(
       action.name,
-      model.state.criteria[action.name]
+      model.state.actions[action.name]
     );
     return;
   }
@@ -128,7 +128,7 @@ const handleActions = function (action) {
   if (!action.isDeleteOneKeyword) {
     const isCriterionRemoved = model.updateCriteria(action);
     if (isCriterionRemoved) {
-      taskBoardView.uncheckActionBtn(action);
+      taskBoardView.resetActionInputs(action);
     }
   } else {
     model.deleteFilterKeyword(action.value);
@@ -137,7 +137,7 @@ const handleActions = function (action) {
   tasks = model.filterTasks(tasks);
   tasks = model.sortTasks(tasks);
 
-  taskBoardView.updateActionsUI(action.name, model.state.criteria[action.name]);
+  taskBoardView.updateActionsUI(action.name, model.state.actions[action.name]);
   taskBoardView.render(tasks);
 };
 
