@@ -136,6 +136,17 @@ export function filterTasks(tasks) {
   return tasks;
 }
 
+export function findTasks(tasks, searchedTerm, field) {
+  let results = [];
+
+  // DON'T use 'g' Flag here beacuse it'll change the test() behaviour
+  const exp = new RegExp(searchedTerm.trim(), "i");
+  for (const key in tasks) {
+    results[key] = tasks[key].filter((item) => exp.test(item[field]));
+  }
+  return results;
+}
+
 export function deleteFilterKeyword(keyword) {
   state.actions["filter"].forEach((filter) => {
     if (filter.field == "keywords") {

@@ -112,6 +112,7 @@ const updateTaskStatus = function (task) {
 
 // Control actions
 const handleActions = function (action) {
+  // Toggle dropmenu
   if (action.isToggle) {
     taskBoardView.updateActionsUI(
       action.name,
@@ -125,19 +126,36 @@ const handleActions = function (action) {
   // Maybe in another situation I'll use 'cloneDeep' from lodash library.
   let tasks = JSON.parse(JSON.stringify(model.state.tasks));
 
-  if (!action.isDeleteOneKeyword) {
+  // Update criteria
+  if (action.isUpateCriteria) {
     const isCriterionRemoved = model.updateCriteria(action);
     if (isCriterionRemoved) {
       taskBoardView.resetActionInputs(action);
     }
-  } else {
+  }
+
+  // Delete a keyword
+  if (action.isDeleteOneKeyword) {
     model.deleteFilterKeyword(action.value);
   }
 
+  // Filtering based on the saved criteria
   tasks = model.filterTasks(tasks);
+
+  // Sorting based on the saved criteria
   tasks = model.sortTasks(tasks);
 
-  taskBoardView.updateActionsUI(action.name, model.state.actions[action.name]);
+  // Search for specific tasks based on a field and its value
+  if (action.isSearch) {
+    tasks = model.findTasks(tasks, action.value, action.field);
+  }
+
+  if (!action.isSearch)
+    taskBoardView.updateActionsUI(
+      action.name,
+      model.state.actions[action.name]
+    );
+
   taskBoardView.render(tasks);
 };
 

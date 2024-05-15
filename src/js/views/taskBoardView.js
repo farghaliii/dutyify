@@ -64,7 +64,11 @@ class TaskBoardView {
     if (btn.classList.contains("btn--add")) return;
 
     const actionOptionEl = btn.closest(".action-option");
-    const actionField = actionOptionEl?.dataset.actionField;
+
+    const actionField = actionOptionEl
+      ? actionOptionEl.dataset.actionField
+      : btn.dataset.actionField;
+
     const actionName = actionOptionEl
       ? actionOptionEl.dataset.actionName
       : btn.dataset.actionName;
@@ -101,6 +105,7 @@ class TaskBoardView {
         name: actionName,
         field: actionField,
         value: "clear",
+        isUpateCriteria: true,
         isToggle: false,
       });
 
@@ -115,6 +120,23 @@ class TaskBoardView {
         field: actionField,
         value: deleteKeyword,
         isDeleteOneKeyword: true,
+        isUpateCriteria: false,
+        isToggle: false,
+      });
+      return;
+    }
+
+    // Search for a task
+    if (btn.classList.contains("btn--search")) {
+      const input = btn.closest(".search").querySelector("input");
+      const searchTerm = input.value;
+      input.value = "";
+      handler({
+        name: actionName,
+        field: actionField,
+        value: searchTerm,
+        isSearch: true,
+        isUpateCriteria: false,
         isToggle: false,
       });
       return;
@@ -129,8 +151,8 @@ class TaskBoardView {
   }
 
   _handleChangedInput(input, handler) {
-    // Except keywords input in the filter action
-    if (input.name == "keywords") return;
+    // Except keywords, search inputs in the filter action
+    if (input.name == "keywords" || input.name == "search") return;
 
     const actionOptionEl = input.closest(".action-option");
     const actionName = actionOptionEl.dataset.actionName;
@@ -164,6 +186,7 @@ class TaskBoardView {
       name: actionName,
       field: actionField,
       value: actionValue,
+      isUpateCriteria: true,
       isToggle: false,
     });
   }
@@ -171,20 +194,38 @@ class TaskBoardView {
   _handleEnterKey(input, handler) {
     if (!input.value) return;
 
-    const actionOptionEl = input.closest("fieldset");
-    const actionName = actionOptionEl.dataset.actionName;
-    const actionField = actionOptionEl.dataset.actionField;
-    const actionValue = input.value;
+    // Keywords
+    if (input.name == "keywords") {
+      const actionOptionEl = input.closest("fieldset");
+      const actionName = actionOptionEl.dataset.actionName;
+      const actionField = actionOptionEl.dataset.actionField;
+      const actionValue = input.value;
+      handler({
+        name: actionName,
+        field: actionField,
+        value: actionValue,
+        isUpateCriteria: true,
+        isToggle: false,
+      });
+    }
+
+    // Search
+    if (input.name == "search") {
+      const actionName = "search";
+      const actionField = "title";
+      const actionValue = input.value;
+      handler({
+        name: actionName,
+        field: actionField,
+        value: actionValue,
+        isUpateCriteria: false,
+        isSearch: true,
+        isToggle: false,
+      });
+    }
 
     // Clear input filed
     input.value = "";
-
-    handler({
-      name: actionName,
-      field: actionField,
-      value: actionValue,
-      isToggle: false,
-    });
   }
 
   updateActionsUI(actionName, criteria) {
