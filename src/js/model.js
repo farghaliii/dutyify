@@ -156,66 +156,72 @@ export function deleteFilterKeyword(keyword) {
 }
 
 export function updateCriteria(action) {
-  let criterionRemoved = false;
-
-  // Get the criterion if already exist
-  const existingCriterion = state.actions[action.name].find(
-    (criterion) => criterion.field === action.field
+  // Get the criterion
+  const existingCriterion = findCriterion(
+    state.actions[action.name],
+    action.field
   );
 
-  // Handle the existing criterion
+  let criterionRemoved = false;
+
+  // Handle the existing criterion  [Updating its value with a new value or Removing it.]
   if (existingCriterion) {
-    // If user click twice on the same criterion remove it from criteria
-    // For checkbox or radio criteria
-    if (existingCriterion.value == action.value && action.field != "keywords") {
-      criterionRemoved = removeActionCriterion(action.name, action.field);
-    }
-
-    // Handle other criteria's input
-    if (existingCriterion.value != action.value) {
-      if (
-        action.name == "filter" &&
-        (action.field == "dueDate" || action.field == "keywords")
-      ) {
-        // Remove filter's criterion
-        if (action.value == "clear") {
-          criterionRemoved = removeActionCriterion(action.name, action.field);
-        }
-
-        // Update filter's criterion
-        if (action.value != "clear") {
-          existingCriterion.value =
-            action.field == "dueDate"
-              ? action.value
-              : existingCriterion.value + `,${action.value}`;
-        }
-      }
-      // For checkbox or radio criteria but with different value
-      // So update the current value instead of remove the criterion
-      if (action.name == "sort" || action.field == "priority") {
-        existingCriterion.value = action.value;
-      }
-    }
+    criterionRemoved = handleExistingCriterion(existingCriterion, action);
   }
 
   // Adding new criterion
-  if (!existingCriterion) {
-    state.actions[action.name].push({
-      field: action.field,
-      value: action.value,
-    });
-  }
+  if (!existingCriterion) addCriterion(action);
 
+  // Update stored data
   storeData(state);
+
   return criterionRemoved;
 }
 
-function removeActionCriterion(actionName, actionField) {
+function findCriterion(criteria, field) {
+  return criteria.find((criterion) => criterion.field === field);
+}
+function handleExistingCriterion(criterion, action) {
+  const shouldRemove = isRemovableCriterion(criterion, action);
+
+  if (shouldRemove) {
+    removeCriterion(action.name, action.field);
+    return true;
+  }
+
+  updateCriterionValue(criterion, action);
+  return false;
+}
+function isRemovableCriterion(criterion, action) {
+  return (
+    (criterion.field !== "keywords" && criterion.value === action.value) ||
+    (action.name === "filter" &&
+      (action.field === "dueDate" || action.field === "keywords") &&
+      action.value === "clear")
+  );
+}
+function updateCriterionValue(criterion, action) {
+  if (action.name === "filter" && action.field === "keywords") {
+    criterion.value = criterion.value
+      ? `${criterion.value},${action.value}`
+      : action.value;
+  } else {
+    criterion.value = action.value;
+  }
+}
+function removeCriterion(actionName, actionField) {
   state.actions[actionName] = state.actions[actionName].filter(
     (cri) => cri.field != actionField
   );
   return true;
 }
+function addCriterion(action) {
+  state.actions[action.name].push({
+    field: action.field,
+    value: action.value,
+  });
+}
+
 function generateTaskId() {
   // Generate random id consists of 6 chrachters
   return randomId(6);
