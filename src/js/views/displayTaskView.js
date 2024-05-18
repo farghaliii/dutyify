@@ -1,7 +1,7 @@
 import "core-js/stable";
 
 class DisplayTaskView {
-  _tasksBoardEl = document.querySelector(".board");
+  _tasksBoardEl = document.querySelector(".board__content");
   _parentEl = document.querySelector(".modal__content-body");
   _data;
 

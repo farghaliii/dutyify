@@ -15,15 +15,15 @@
 </head>
 
 <body>
-  <main class="main container">
-
+  <main class="board container">
     <!-- Header -->
-    <header class="secondary-header board-header">
+    <header class="board__header">
       <!-- Task board {Category} -->
-      <div class="primary-heading-box">
-        <h1 class="primary-heading">Task Board</h1>
-        <span class="category">Category Name</span>
+      <div class="header__left-wrapper">
+        <h1 class="board__heading">Task Board</h1>
+        <div class="board__category"></div>
       </div>
+
 
       <!-- Search -->
       <div class="search">
@@ -77,18 +77,18 @@
       </nav>
 
       <!-- Dropmenu -->
-      <div class="board-header__dropmenu hidden" data-current-action="none">
+      <div class="board__dropmenu hidden" data-current-action="none">
         <div class="dropmenu__content"></div>
       </div>
     </header>
 
     <!-- Board -->
-    <section class="board">
+    <section class="board__content">
       <!-- To Do -->
       <div id="todo" class="card">
         <div class="card__header">
           <h2 class="secondary-heading">To Do</h2>
-          <span class="tasks-number">5</span>
+          <span class="tasks-number">?</span>
         </div>
         <ul class="card__tasks-container"></ul>
       </div>
@@ -97,7 +97,7 @@
       <div id="inProgress" class="card">
         <div class="card__header">
           <h2 class="secondary-heading">In Progress</h2>
-          <span class="tasks-number">5</span>
+          <span class="tasks-number">?</span>
         </div>
         <ul class="card__tasks-container"></ul>
       </div>
@@ -106,7 +106,7 @@
       <div id="completed" class="card">
         <div class="card__header">
           <h2 class="secondary-heading">Completed</h2>
-          <span class="tasks-number">7</span>
+          <span class="tasks-number">?</span>
         </div>
         <ul class="card__tasks-container"></ul>
       </div>
@@ -115,7 +115,7 @@
       <div id="outdated" class="card">
         <div class="card__header">
           <h2 class="secondary-heading">Outdated</h2>
-          <span class="tasks-number">2</span>
+          <span class="tasks-number">?</span>
         </div>
         <ul class="card__tasks-container"></ul>
       </div>

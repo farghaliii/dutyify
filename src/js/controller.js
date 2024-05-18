@@ -10,9 +10,13 @@ import modalView from "./views/modalView.js";
 // Control displaying all tasks
 const displayTasks = function () {
   // If there are criteria, they will be applied first
-  let tasks = model.filterTasks(JSON.parse(JSON.stringify(model.state.tasks)));
+  let tasks = model.filterTasks(model.getTasks());
   tasks = model.sortTasks(tasks);
-  taskBoardView.render(tasks);
+  taskBoardView.render(
+    tasks,
+    model.state.categories,
+    model.state.currentCategory
+  );
 };
 
 // Control displaying a task
@@ -75,7 +79,7 @@ const deleteTask = function (task) {
 };
 
 // Control displaying 'Edit Task Form'
-const displayEditTask = function (e, task) {
+const displayEditTask = function (task) {
   const data = {
     task: task,
     categories: model.state.categories,
@@ -121,10 +125,12 @@ const handleActions = function (action) {
     return;
   }
 
-  // Deep cloning the tasks objects
-  // [This isn't the best way to clone an object deeply BUT it works fine here.]
-  // Maybe in another situation I'll use 'cloneDeep' from lodash library.
-  let tasks = JSON.parse(JSON.stringify(model.state.tasks));
+  // Update current category
+  if (action.name == "filter" && action.field == "category") {
+    model.updateCurrentCategory(action);
+  }
+
+  let tasks = model.getTasks();
 
   // Update criteria
   if (action.isUpateCriteria) {
@@ -156,7 +162,11 @@ const handleActions = function (action) {
       model.state.actions[action.name]
     );
 
-  taskBoardView.render(tasks);
+  taskBoardView.render(
+    tasks,
+    model.state.categories,
+    model.state.currentCategory
+  );
 };
 
 // Event Handlers

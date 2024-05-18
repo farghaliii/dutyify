@@ -4,9 +4,10 @@ import { makeDraggable, makeDroppable } from "../helpers";
 import { PRIORITY_HIGH, PRIORITY_LOW, PRIORITY_MEDIUM } from "../config";
 
 class TaskBoardView {
-  _parentEl = document.querySelector(".board");
-  _boardHeaderEl = document.querySelector(".board-header");
-  _dropmenuEl = this._boardHeaderEl.querySelector(".board-header__dropmenu");
+  _parentEl = document.querySelector(".board__content");
+  _boardHeaderEl = document.querySelector(".board__header");
+  _boardCategorytEl = this._boardHeaderEl.querySelector(".board__category");
+  _dropmenuEl = this._boardHeaderEl.querySelector(".board__dropmenu");
   _dropmenuContentEl = this._dropmenuEl.querySelector(".dropmenu__content");
   _todoCardEl = document.querySelector("#todo");
   _outdatedCardEl = document.querySelector("#outdated");
@@ -14,6 +15,8 @@ class TaskBoardView {
   _completedCardEl = document.querySelector("#completed");
   _tasksContainersEl = document.querySelectorAll(".card__tasks-container");
   _data;
+  _categories;
+  _currentCategory;
 
   constructor() {
     makeDraggable(this._parentEl);
@@ -22,8 +25,10 @@ class TaskBoardView {
     );
   }
 
-  render(data) {
+  render(data, categories = [], currentCategory = "") {
     this._data = data;
+    this._categories = categories;
+    this._currentCategory = currentCategory;
     this._generateMarkup();
   }
 
@@ -39,9 +44,18 @@ class TaskBoardView {
 
   addHandlerActions(handler) {
     const handleClick = (e) => {
+      const categoryEl = e.target;
+      console.log(categoryEl);
       const btn = e.target.closest(".btn");
-      if (!btn) return;
-      this._handleClickedBtn(btn, handler);
+      if (btn) this._handleClickedBtn(btn, handler);
+      if (categoryEl.classList.contains("board__category-name")) {
+        this._boardCategorytEl.innerHTML = "";
+        this._boardCategorytEl.insertAdjacentHTML(
+          "afterbegin",
+          this._generateCategorySelectBoxMarkup()
+        );
+      }
+      return;
     };
 
     const handleChange = (e) => {
@@ -186,7 +200,7 @@ class TaskBoardView {
       name: actionName,
       field: actionField,
       value: actionValue,
-      isUpateCriteria: true,
+      isUpateCriteria: actionField == "category" ? false : true,
       isToggle: false,
     });
   }
@@ -241,7 +255,7 @@ class TaskBoardView {
       this._unHighlightActionOption(inp.closest(".action-option"));
     });
 
-    if (actionName == "filter") {
+    if (actionName == "filter" && criteria.length != 0) {
       // Keywords container
       const keywordsEl = this._dropmenuContentEl.querySelector(
         ".action-option__keywords-container"
@@ -346,10 +360,40 @@ class TaskBoardView {
       .map((task) => this._generateTaskPreviewCardMarkup(task))
       .join("");
 
+    this._boardCategorytEl.innerHTML = "";
+    this._boardCategorytEl.insertAdjacentHTML(
+      "afterbegin",
+      this._generateCategoryNameMarkup(this._currentCategory)
+    );
     this._todoCardMarkup(todoMarkup, this._data.todo.length);
     this._inProgressCardMarkup(inProgressMarkup, this._data.inProgress.length);
     this._completedCardMarkup(completedMarkup, this._data.completed.length);
     this._outdatedCardMarkup(outdatedMarkup, this._data.outdated.length);
+  }
+
+  _generateCategoryNameMarkup(
+    currentCategory = { id: "general", name: "general" }
+  ) {
+    return `<span class="board__category-name">${currentCategory.name}</span>`;
+  }
+
+  _generateCategorySelectBoxMarkup() {
+    const options = this._categories
+      ? this._categories
+          .map(
+            (category) =>
+              `<option value='${category.id}' ${
+                this._currentCategory.id === category.id ? "selected" : ""
+              }>${category.name}</option>`
+          )
+          .join("")
+      : `<option value='${this._currentCategory.id}'>${this._currentCategory.name}</option>`;
+
+    return `
+      <div class="action-option" data-action-name="filter" data-action-field="category">
+        <select name="select-category" class="board__category-select">${options}</select>
+      </div>
+    `;
   }
 
   _todoCardMarkup(TasksMarkup, TasksNum) {

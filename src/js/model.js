@@ -1,8 +1,24 @@
 import "core-js/stable";
+const _ = require("lodash");
 import { randomId } from "./helpers";
 import { PRIORITY_LOW, PRIORITY_MEDIUM, PRIORITY_HIGH } from "./config";
 
 export const state = initData();
+
+export function getTasks() {
+  let tasks;
+  if (state.currentCategory.id === "general") {
+    tasks = state.tasks;
+  } else {
+    tasks = {};
+    for (const taskStatus in state.tasks) {
+      tasks[taskStatus] = state.tasks[taskStatus].filter(
+        (task) => task.category.id === state.currentCategory.id
+      );
+    }
+  }
+  return _.cloneDeep(tasks);
+}
 
 export function addNewTask(data) {
   const task = {
@@ -162,6 +178,14 @@ export function deleteFilterKeyword(keyword) {
       }
     }
   });
+  // Update persistent data
+  storeData(state);
+}
+
+export function updateCurrentCategory(action) {
+  state.currentCategory = state.categories.find(
+    (cat) => cat.id === action.value
+  );
   // Update persistent data
   storeData(state);
 }
@@ -491,9 +515,8 @@ function storeData(data = undefined) {
           },
         ],
       },
-
+      currentCategory: { id: "web-development", name: "web development" },
       actions: { sort: [], filter: [] },
-
       categories: [
         { id: "general", name: "general" },
         { id: "web-development", name: "web development" },

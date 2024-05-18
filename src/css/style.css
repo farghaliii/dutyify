@@ -48,59 +48,83 @@ body {
   overflow-x: hidden;
 }
 
-.main {
+.board {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   row-gap: 1.2rem;
   padding: 0 4.8rem;
 }
 
-.board-header {
+.board__header {
+  grid-column: 1/-1;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(max-content, 1fr));
+  grid-template-columns: max-content minmax(max-content, 4fr) minmax(
+      max-content,
+      3fr
+    );
   align-items: center;
-  row-gap: 3.2rem;
+  column-gap: 1.2rem;
+  row-gap: 2.4rem;
   margin-top: 3.2rem;
-  grid-column: 1/-1;
 }
-.primary-heading-box {
+.header__left-wrapper {
   display: flex;
   align-items: center;
   justify-self: start;
+  gap: 0.8rem;
 }
-.primary-heading {
+.board__heading {
   display: inline-block;
   font-size: 2.4rem;
   font-weight: 300;
   line-height: 1;
 }
-.primary-heading::after {
-  content: "|";
+.board__category .action-option {
+  border: none;
+  border-radius: 0;
+  align-items: unset;
+  gap: unset;
+  padding: 0;
+  font-size: inherit;
+  line-height: 0;
+  display: unset;
+  position: unset;
+}
+
+.board__category-name {
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 1.6rem;
   color: #a71244;
-  font-weight: 700;
-}
-.category {
-  font-weight: 300;
-  font-size: 1.8rem;
-  color: #444444;
   cursor: pointer;
+  border-bottom: 1px solid currentColor;
 }
+.board__category-select {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  color: #333;
+  padding: 1rem 1.8rem;
+  font-family: inherit;
+  font-size: 1.2rem;
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
+}
+
 .search {
-  justify-self: stretch;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
+  justify-self: stretch;
 }
 .search__input {
   width: 80%;
   font-family: inherit;
   font-size: 1.2rem;
   color: #333;
-  background: none;
   border: none;
   border-radius: 0.6rem;
-  padding: 1rem 1.8rem;
+  padding: 1.22rem 1.8rem;
   transition: width 0.2s ease-in;
   margin-right: -3.6rem;
   box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
@@ -114,14 +138,16 @@ body {
 .search__btn {
   background-color: #a71244 !important;
   color: #fafafa !important;
-  padding: 0.74rem;
+  padding: 1rem;
   border-top-right-radius: 0.6rem;
   border-bottom-right-radius: 0.6rem;
+  box-shadow: 0 0.16rem 0.2rem rgba(0, 0, 0, 0.3);
+  border: none !important;
 }
 .search__btn:focus,
 .search__btn:hover {
   outline: none;
-  background-color: #ca871b !important;
+  background-color: #a71244e0 !important;
 }
 
 .search__icon {
@@ -136,10 +162,10 @@ body {
 .nav__actions-box {
   display: flex;
   align-items: center;
-  gap: 2.4rem;
+  gap: 1rem;
 }
 
-.board-header__dropmenu {
+.board__dropmenu {
   grid-column: 1/-1;
 }
 .dropmenu__content {
@@ -295,28 +321,27 @@ button.btn--delete-keyword {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  border: none;
+  border: 1px solid currentColor;
+  border-radius: 0.2rem;
   background: none;
   color: #444444;
   font-size: 1.4rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  padding: 1rem 2rem;
 }
 .btn__icon {
-  width: 2.4rem;
+  width: 2.2rem;
   color: #222222;
 }
 .btn--add {
   background-color: #fff;
   color: #a71244;
-  border: 0.1rem solid;
-  border-radius: 0.2rem;
-  padding: 0.8rem 2rem;
 }
 .btn__icon--add {
   color: inherit;
-  width: 1.4rem;
+  width: 2.2rem;
 }
 .btn--add:hover {
   background-color: #a71244;
@@ -333,7 +358,7 @@ button.btn--delete-keyword {
   background-color: #444;
 }
 /* Board */
-.board {
+.board__content {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 3.2rem;
@@ -553,7 +578,7 @@ button.btn--delete-keyword {
 .task--opened .btn--delete-action,
 .task--opened .btn--edit-action {
   border: 0.1rem solid;
-  padding: 0.8rem 2rem;
+  padding: 1rem 2rem;
   border-radius: 0.4rem;
   transition: transform 0.3s ease;
 }
@@ -589,7 +614,7 @@ button.btn--delete-keyword {
 }
 .task--opened .delete-action__confirmation .btn {
   border: 0.1rem solid #bfbfbf;
-  padding: 0.8rem 1.2rem;
+  padding: 1rem 2rem;
   border-radius: 0.2rem;
 }
 .task--opened .delete-action__confirmation .btn--delete-confirmed {
@@ -632,7 +657,7 @@ button.btn--delete-keyword {
 }
 .modal__btn {
   border: 0.1rem solid #e0e0e0;
-  padding: 0.6rem 1rem;
+  padding: 1rem 2rem;
   border-radius: 0.2rem;
   font-size: 1.2rem;
   font-weight: 700;
@@ -729,7 +754,7 @@ input#due-date:valid + span::after {
   display: inline-block;
   align-self: flex-end;
   border-radius: 0.2rem;
-  padding: 0.8rem 2rem;
+  padding: 1rem 2rem;
 }
 
 .form__btn--add {
@@ -775,7 +800,7 @@ input#due-date:valid + span::after {
   html {
     font-size: 60.5%;
   }
-  .board {
+  .board__content {
     grid-template-columns: repeat(4, auto);
   }
   .card__header {
@@ -794,15 +819,15 @@ input#due-date:valid + span::after {
   }
 }
 @media screen and (max-width: 900px) {
-  .board {
+  .board__content {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media screen and (max-width: 880px) {
-  .primary-heading {
+  .board__heading {
     font-size: 2.4rem;
   }
-  .category {
+  .board__category-name {
     font-size: 1.8rem;
   }
   .action-box {
@@ -819,7 +844,7 @@ input#due-date:valid + span::after {
   }
 }
 @media screen and (max-width: 580px) {
-  .secondary-header {
+  .board__header {
     flex-direction: column;
     align-items: start;
     gap: 2.4rem;
@@ -832,14 +857,14 @@ input#due-date:valid + span::after {
   }
 }
 @media screen and (max-width: 500px) {
-  .secondary-header {
+  .board__header {
     gap: 1.2rem;
   }
 
-  .primary-heading {
+  .board__heading {
     font-size: 2rem;
   }
-  .category {
+  .board__category-name {
     font-size: 1.4rem;
   }
   .btn {
@@ -851,25 +876,18 @@ input#due-date:valid + span::after {
   .btn__icon--add {
     width: 1.2rem;
   }
-  .board {
+  .board__content {
     grid-template-columns: repeat(1, 1fr);
   }
 }
 @media screen and (max-width: 380px) {
-  .secondary-header {
+  .board__header {
     padding: 1.2rem 1rem 0 1rem;
   }
-  .primary-heading-box {
+  .header__left-wrapper {
     flex-direction: column;
     align-items: start;
     gap: 0.6rem;
-  }
-  .primary-heading::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 0.2rem;
-    background-color: #a71244;
   }
 
   .btn {
@@ -889,10 +907,10 @@ input#due-date:valid + span::after {
   html {
     font-size: 58.5%;
   }
-  .primary-heading {
+  .board__heading {
     font-size: 1.8rem;
   }
-  .category {
+  .board__category-name {
     font-size: 1.2rem;
   }
   .btn--filter .btn__text,
