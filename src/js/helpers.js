@@ -95,9 +95,7 @@ function unHighlightTarget(target) {
 
 export function formDataExtraction(form) {
   let data = {};
-  new FormData(form).forEach(function (value, key) {
-    data[key] = value;
-  });
+  new FormData(form).forEach((value, key) => (data[key] = value));
   return data;
 }
 

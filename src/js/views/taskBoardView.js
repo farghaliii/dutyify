@@ -45,9 +45,10 @@ class TaskBoardView {
   addHandlerActions(handler) {
     const handleClick = (e) => {
       const categoryEl = e.target;
-      console.log(categoryEl);
       const btn = e.target.closest(".btn");
+
       if (btn) this._handleClickedBtn(btn, handler);
+
       if (categoryEl.classList.contains("board__category-name")) {
         this._boardCategorytEl.innerHTML = "";
         this._boardCategorytEl.insertAdjacentHTML(
@@ -55,6 +56,15 @@ class TaskBoardView {
           this._generateCategorySelectBoxMarkup()
         );
       }
+
+      if (categoryEl.classList.contains("board__category-select")) {
+        this._boardCategorytEl.innerHTML = "";
+        this._boardCategorytEl.insertAdjacentHTML(
+          "afterbegin",
+          this._generateCategoryNameMarkup()
+        );
+      }
+
       return;
     };
 
@@ -371,10 +381,8 @@ class TaskBoardView {
     this._outdatedCardMarkup(outdatedMarkup, this._data.outdated.length);
   }
 
-  _generateCategoryNameMarkup(
-    currentCategory = { id: "general", name: "general" }
-  ) {
-    return `<span class="board__category-name">${currentCategory.name}</span>`;
+  _generateCategoryNameMarkup() {
+    return `<span class="board__category-name">${this._currentCategory.name}</span>`;
   }
 
   _generateCategorySelectBoxMarkup() {
@@ -391,7 +399,9 @@ class TaskBoardView {
 
     return `
       <div class="action-option" data-action-name="filter" data-action-field="category">
-        <select name="select-category" class="board__category-select">${options}</select>
+        <select name="select-category" class="board__category-select">
+          ${options}
+        </select>
       </div>
     `;
   }

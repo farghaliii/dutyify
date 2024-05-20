@@ -4,7 +4,7 @@ import { PRIORITY_HIGH, PRIORITY_LOW, PRIORITY_MEDIUM } from "../config";
 
 class AddTaskView {
   _parentEl = document.querySelector(".modal__content-body");
-  _btnAddTaskEl = document.querySelector(".btn--add");
+  _btnAddTaskEl = document.querySelector("[data-action-name='add-task']");
   _data;
 
   render(data) {
@@ -20,7 +20,7 @@ class AddTaskView {
     this._btnAddTaskEl.addEventListener("click", handler);
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") handler(e);
-      if (e.key === "n" && !this._isAnyInputOrTextareFocused()) handler();
+      if (e.key === "t" && !this._isAnyInputOrTextareFocused()) handler();
     });
   }
 

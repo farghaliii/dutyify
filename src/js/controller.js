@@ -5,6 +5,7 @@ import taskBoardView from "./views/taskBoardView.js";
 import displayTaskView from "./views/displayTaskView.js";
 import addTaskView from "./views/addTaskView.js";
 import editTaskView from "./views/editTaskView.js";
+import addCategoryView from "./views/addCategoryView.js";
 import modalView from "./views/modalView.js";
 
 // Control displaying all tasks
@@ -66,6 +67,34 @@ const addTask = function (data) {
   displayTasks();
 };
 
+// Control displaying 'Add Category Form'
+const displayAddCategory = function (e = undefined) {
+  if (e?.key === "Escape") modalView.closeModal();
+  else {
+    // Rendering the form
+    addCategoryView.render();
+
+    // Attach submit event listener
+    addCategoryView.addHandlerSubmit(addCategory);
+
+    // Open the modal to display it
+    modalView.openModal();
+  }
+};
+
+// Control adding new category
+const addCategory = function (data) {
+  // Clear the form
+  addCategoryView.clear();
+
+  // Add a new task
+  model.addNewCategory(data);
+
+  modalView.closeModal();
+  // Re-render the tasks board
+  displayTasks();
+};
+
 // Control delete a task
 const deleteTask = function (task) {
   // Delete the task
@@ -79,7 +108,7 @@ const deleteTask = function (task) {
 };
 
 // Control displaying 'Edit Task Form'
-const displayEditTask = function (task) {
+const displayEditTask = function (_, task) {
   const data = {
     task: task,
     categories: model.state.categories,
@@ -175,3 +204,4 @@ taskBoardView.addHandlerUpdateTaskStatus(updateTaskStatus);
 taskBoardView.addHandlerActions(handleActions);
 displayTaskView.addHandlerRender(displayTask);
 addTaskView.addHandlerRender(displayAddTask);
+addCategoryView.addHandlerRender(displayAddCategory);

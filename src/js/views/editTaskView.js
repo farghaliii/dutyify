@@ -30,6 +30,7 @@ class EditTaskView {
   _generateMarkup() {
     const todayDate = new Date().toISOString().split("T")[0];
     const task = this._data.task;
+    console.log(task);
     const markup = `
       <form class="form form--editing">
         <input type="hidden" name="id" value="${task.id}" />

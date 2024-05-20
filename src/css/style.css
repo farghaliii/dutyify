@@ -101,13 +101,15 @@ body {
   border-bottom: 1px solid currentColor;
 }
 .board__category-select {
+  text-transform: capitalize;
   background-color: #fff;
   border: none;
   border-radius: 0.6rem;
   color: #333;
-  padding: 1rem 1.8rem;
+  padding: 1rem 1.4rem;
   font-family: inherit;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 500;
   box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
 }
 

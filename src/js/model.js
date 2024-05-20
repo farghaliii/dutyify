@@ -213,6 +213,17 @@ export function updateCriteria(action) {
   return criterionRemoved;
 }
 
+export function addNewCategory(data) {
+  const category = {
+    id: data.name.split(" ").join("-"),
+    name: data.name,
+  };
+
+  state.categories.push(category);
+  // Update persistent data
+  storeData(state);
+}
+
 function findCriterion(criteria, field) {
   return criteria.find((criterion) => criterion.field === field);
 }
