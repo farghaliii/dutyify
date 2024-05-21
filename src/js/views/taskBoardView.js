@@ -154,7 +154,6 @@ class TaskBoardView {
     if (btn.classList.contains("btn--search")) {
       const input = btn.closest(".search").querySelector("input");
       const searchTerm = input.value;
-      input.value = "";
       handler({
         name: actionName,
         field: actionField,
@@ -168,7 +167,6 @@ class TaskBoardView {
 
     // Delete category
     if (btn.classList.contains("btn--delete-category")) {
-      console.log(btn);
       const isDeleted = confirm("Are you want to delete this category?");
       if (isDeleted) {
         handler({
@@ -186,6 +184,7 @@ class TaskBoardView {
 
     // Handle toggling dropdown menu with an action's options
     this._displayActionOptions(actionName);
+
     handler({
       name: actionName,
       isToggle: true,
@@ -242,6 +241,8 @@ class TaskBoardView {
       const actionName = actionOptionEl.dataset.actionName;
       const actionField = actionOptionEl.dataset.actionField;
       const actionValue = input.value;
+      // Clear input filed
+      input.value = "";
       handler({
         name: actionName,
         field: actionField,
@@ -265,9 +266,6 @@ class TaskBoardView {
         isToggle: false,
       });
     }
-
-    // Clear input filed
-    input.value = "";
   }
 
   updateActionsUI(actionName, criteria) {
@@ -338,7 +336,10 @@ class TaskBoardView {
   }
 
   resetActionInputs(action) {
-    if (action.field == "dueDate" || action.field == "keywords") {
+    if (
+      action.name === "filter" &&
+      (action.field == "dueDate" || action.field == "keywords")
+    ) {
       const inpParent = this._dropmenuContentEl.querySelector(
         `[data-action-name='${action.name}'][data-action-field='${action.field}']`
       );
