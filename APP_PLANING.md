@@ -55,7 +55,7 @@
 
 ### Categorize tasks
 
-- Provide an interface for users to create, edit, and delete categories or projects.
+- Provide an interface for users to create, and delete categories or projects.
 - Allow users to assign tasks to specific categories during task creation or editing.
 - Enable filtering tasks by category in the task list view.
 

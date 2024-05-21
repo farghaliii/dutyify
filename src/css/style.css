@@ -80,6 +80,11 @@ body {
   font-weight: 300;
   line-height: 1;
 }
+.board__category {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
 .board__category .action-option {
   border: none;
   border-radius: 0;
@@ -112,7 +117,12 @@ body {
   font-weight: 500;
   box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
 }
-
+.btn--delete-category {
+  background: none !important;
+  border: none !important;
+  padding: 0.4rem 0.2rem 0 0.2rem !important;
+  font-size: 1.6rem !important;
+}
 .search {
   display: flex;
   align-items: center;

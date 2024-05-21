@@ -81,9 +81,10 @@ class EditTaskView {
               ${this._data.categories
                 .map(
                   (cat) =>
-                    `<option value="${cat.id}" ${
-                      task.category.id == cat.id ? "selected" : ""
-                    }>${cat.name}</option>`
+                    `<option value="${cat.id}" 
+                      ${cat.id === task.category.id ? "selected" : ""}
+                      ${cat.id === "general" ? "disabled" : ""}
+                    >${cat.name}</option>`
                 )
                 .join("")}
             </select>

@@ -91,6 +91,7 @@ const addCategory = function (data) {
   model.addNewCategory(data);
 
   modalView.closeModal();
+
   // Re-render the tasks board
   displayTasks();
 };
@@ -154,8 +155,13 @@ const handleActions = function (action) {
     return;
   }
 
-  // Update current category
+  // Delete Category
+  if (action.name === "delete-category") {
+    model.deleteCategory(action);
+  }
+
   if (action.name == "filter" && action.field == "category") {
+    // Update current category
     model.updateCurrentCategory(action);
   }
 
@@ -185,11 +191,12 @@ const handleActions = function (action) {
     tasks = model.findTasks(tasks, action.value, action.field);
   }
 
-  if (!action.isSearch)
+  if (!action.isSearch && !action.isDeleteCategory) {
     taskBoardView.updateActionsUI(
       action.name,
       model.state.actions[action.name]
     );
+  }
 
   taskBoardView.render(
     tasks,

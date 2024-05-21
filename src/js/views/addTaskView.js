@@ -61,7 +61,13 @@ class AddTaskView {
             <label for="category">Category / Project</label>
             <select name="category" id="category">
               ${this._data
-                .map((cat) => `<option value="${cat.id}">${cat.name}</option>`)
+                .map(
+                  (cat) => `
+                    <option value="${cat.id}"
+                      ${cat.id === "general" ? "disabled" : ""}>
+                      ${cat.name}
+                    </option>`
+                )
                 .join("")}
             </select>
           </div>

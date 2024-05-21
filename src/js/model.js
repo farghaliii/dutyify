@@ -224,6 +224,16 @@ export function addNewCategory(data) {
   storeData(state);
 }
 
+export function deleteCategory(action) {
+  const categoryIndx = state.categories.findIndex((c) => c.id === action.value);
+  state.categories.splice(categoryIndx, 1);
+  for (const [key, tasks] of Object.entries(state.tasks)) {
+    state.tasks[key] = tasks.filter((t) => t.category.id !== action.value);
+  }
+  state.currentCategory = { id: "general", name: "general" };
+  storeData(state);
+}
+
 function findCriterion(criteria, field) {
   return criteria.find((criterion) => criterion.field === field);
 }
@@ -526,12 +536,21 @@ function storeData(data = undefined) {
           },
         ],
       },
-      currentCategory: { id: "web-development", name: "web development" },
+      currentCategory: { id: "general", name: "general" },
       actions: { sort: [], filter: [] },
       categories: [
         { id: "general", name: "general" },
         { id: "web-development", name: "web development" },
         { id: "dutyify-application", name: "dutyify application" },
+        { id: "design", name: "design" },
+        { id: "performance", name: "Performance" },
+        { id: "security", name: "Security" },
+        { id: "database", name: "Database" },
+        { id: "backend-development", name: "Backend Development" },
+        { id: "mobile-development", name: "Mobile Development" },
+        { id: "marketing", name: "Marketing" },
+        { id: "documentation", name: "Documentation" },
+        { id: "testing", name: "Testing" },
       ],
     };
   }

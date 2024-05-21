@@ -166,6 +166,24 @@ class TaskBoardView {
       return;
     }
 
+    // Delete category
+    if (btn.classList.contains("btn--delete-category")) {
+      console.log(btn);
+      const isDeleted = confirm("Are you want to delete this category?");
+      if (isDeleted) {
+        handler({
+          name: "delete-category",
+          field: "categories",
+          value: btn.dataset.categoryId,
+          isSearch: false,
+          isUpateCriteria: false,
+          isDeleteCategory: true,
+          isToggle: false,
+        });
+      }
+      return;
+    }
+
     // Handle toggling dropdown menu with an action's options
     this._displayActionOptions(actionName);
     handler({
@@ -265,12 +283,13 @@ class TaskBoardView {
       this._unHighlightActionOption(inp.closest(".action-option"));
     });
 
-    if (actionName == "filter" && criteria.length != 0) {
+    // Clear keywords container
+    if (actionName == "filter") {
       // Keywords container
       const keywordsEl = this._dropmenuContentEl.querySelector(
         ".action-option__keywords-container"
       );
-      keywordsEl.innerHTML = "";
+      keywordsEl ? (keywordsEl.innerHTML = "") : "";
     }
 
     // Set current criteria
@@ -382,7 +401,19 @@ class TaskBoardView {
   }
 
   _generateCategoryNameMarkup() {
-    return `<span class="board__category-name">${this._currentCategory.name}</span>`;
+    const isGeneral = this._currentCategory.id === "general";
+    return `
+      <span class="board__category-name">
+        ${this._currentCategory.name}
+      </span>
+      ${
+        !isGeneral
+          ? `<button class="btn btn--delete-category" data-category-id='${this._currentCategory.id}'>
+              &#x2715;
+            </button>`
+          : ``
+      }
+    `;
   }
 
   _generateCategorySelectBoxMarkup() {
@@ -406,20 +437,20 @@ class TaskBoardView {
     `;
   }
 
-  _todoCardMarkup(TasksMarkup, TasksNum) {
-    this._generateCardMarkup(this._todoCardEl, TasksMarkup, TasksNum);
+  _todoCardMarkup(tasksMarkup, tasksNum) {
+    this._generateCardMarkup(this._todoCardEl, tasksMarkup, tasksNum);
   }
 
-  _inProgressCardMarkup(TasksMarkup, TasksNum) {
-    this._generateCardMarkup(this._inprogressCardEl, TasksMarkup, TasksNum);
+  _inProgressCardMarkup(tasksMarkup, tasksNum) {
+    this._generateCardMarkup(this._inprogressCardEl, tasksMarkup, tasksNum);
   }
 
-  _completedCardMarkup(TasksMarkup, TasksNum) {
-    this._generateCardMarkup(this._completedCardEl, TasksMarkup, TasksNum);
+  _completedCardMarkup(tasksMarkup, tasksNum) {
+    this._generateCardMarkup(this._completedCardEl, tasksMarkup, tasksNum);
   }
 
-  _outdatedCardMarkup(TasksMarkup, TasksNum) {
-    this._generateCardMarkup(this._outdatedCardEl, TasksMarkup, TasksNum);
+  _outdatedCardMarkup(tasksMarkup, tasksNum) {
+    this._generateCardMarkup(this._outdatedCardEl, tasksMarkup, tasksNum);
   }
 
   _generateCardMarkup(cardEl, tasksMarkup, tasksNum) {
