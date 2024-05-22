@@ -35,7 +35,7 @@ class AddTaskView {
     const todayDate = new Date().toISOString().split("T")[0];
     const markup = `
       <form class="form form--adding">
-        <div class="form__first-box">
+
           <div class="form__group form__group--full-col">
             <label for="title">Title</label>
             <input type="text" name="title" id="title" minlength="4" placeholder="Task's title..." required>
@@ -44,17 +44,18 @@ class AddTaskView {
 
           <div class="form__group form__group--full-col">
             <label for="description">Description</label>
-            <textarea name="description" id="description" minlength="8" cols="30" rows="10" value=""
+            <textarea name="description" id="description" minlength="8" cols="30" rows="2" value=""
               placeholder="Task's description..." required></textarea>
             <span class="feedback-message">Must be more than<span class="highlighted">10 characters</span></span>
           </div>
-        </div>
 
-        <div class="form__second-box">
           <div class="form__group">
-            <label for="keywords">Keywords</label>
-            <input type="text" name="keywords" id="keywords" placeholder="keywords Separated by comma ','">
-            <span class="feedback-message">Optional! Maximum<span class="highlighted">3 keywords</span>.</span>
+            <label for="priority-level">Priority</label>
+            <select name="priority-level" id="priority-level">
+              <option value="${PRIORITY_LOW}">Low</option>
+              <option value="${PRIORITY_MEDIUM}">Medium</option>
+              <option value="${PRIORITY_HIGH}">High</option>
+            </select>
           </div>
 
           <div class="form__group">
@@ -72,21 +73,20 @@ class AddTaskView {
             </select>
           </div>
 
+
           <div class="form__group">
-            <label for="priority-level">Priority</label>
-            <select name="priority-level" id="priority-level">
-              <option value="${PRIORITY_LOW}">Low</option>
-              <option value="${PRIORITY_MEDIUM}">Medium</option>
-              <option value="${PRIORITY_HIGH}">High</option>
-            </select>
+            <label for="keywords">Keywords</label>
+            <input type="text" name="keywords" id="keywords" placeholder="keywords Separated by comma ','">
+            <span class="feedback-message">Optional! Maximum<span class="highlighted">3 keywords</span>.</span>
           </div>
+
 
           <div class="form__group">
             <label for="due-date">Due Date</label>
             <input type="date" value="${todayDate}" min="${todayDate}" name="due-date" id="due-date">
             <span class="feedback-message">Only<span class="highlighted">future</span> dates.</span>
           </div>
-        </div>
+
 
         <div class="form__group form__group--actions form__group--full-col">
           <button type="submit" class="btn form__btn form__btn--add">Add</button>

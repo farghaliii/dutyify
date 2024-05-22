@@ -36,7 +36,6 @@ class EditTaskView {
         <input type="hidden" name="id" value="${task.id}" />
         <input type="hidden" name="oldStatus" value="${task.status}" />
 
-        <div class="form__first-box">
           <div class="form__group form__group--full-col">
             <label for="title">Title</label>
             <input
@@ -62,9 +61,9 @@ class EditTaskView {
               </textarea>
             <span class="feedback-message">Must be more than<span class="highlighted">10 characters</span></span>
           </div>
-        </div>
 
-        <div class="form__second-box">
+
+
           <div class="form__group">
             <label for="keywords">Keywords</label>
             <input
@@ -144,9 +143,9 @@ class EditTaskView {
             min="${todayDate}" name="due-date" id="due-date">
             <span class="feedback-message">Only<span class="highlighted">future</span> dates.</span>
           </div>
-        </div>
+      
 
-        <div class="form__group form__group--actions form__group--full-col">
+        <div class="form__group form__group--actions">
           <button type="submit" class="btn form__btn form__btn--edit">Update</button>
         </div>
       </form>

@@ -35,12 +35,10 @@ class AddCategoryView {
   _generateMarkup() {
     const markup = `
       <form class="form form--adding">
-        <div class="form__first-box">
-          <div class="form__group form__group--full-col">
-            <label for="name">Category Name</label>
-            <input type="text" name="name" id="name" minlength="4" placeholder="Category name..." required>
-            <span class="feedback-message">Must be more than<span class="highlighted">4 characters</span>.</span>
-          </div>
+        <div class="form__group form__group--full-col">
+          <label for="name">Category Name</label>
+          <input type="text" name="name" id="name" minlength="4" placeholder="Category name..." required>
+          <span class="feedback-message">Must be more than<span class="highlighted">4 characters</span>.</span>
         </div>
 
         <div class="form__group form__group--actions form__group--full-col">

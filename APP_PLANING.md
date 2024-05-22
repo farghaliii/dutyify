@@ -21,39 +21,39 @@
 
 ## Features
 
-### Create a new task
+### Create a new task ✅
 
 - Allow users to input a title and description for the task.
 - Include an optional field for setting a deadline for the task.
 - Provide options for users to select the priority level (high, medium, low) or assign numerical values to prioritize tasks.
 - Allow users to optionally assign the task to a specific category or project for better organization.
 
-### Delete a task
+### Delete a task ✅
 
 - Implement a delete button or action for each task in the task list.
 - Display a confirmation dialog box when the delete action is triggered to prevent accidental deletion.
   Upon confirmation, remove the task from the task list.
 
-### Mark a task as complete
+### Mark a task as complete ✅
 
 - Include a checkbox or toggle button next to each task in the task list.
 - When the checkbox/button is clicked, visually indicate that the task has been completed
   (e.g., strike through the task title or change its color).
 - Provide an option to filter or hide completed tasks from the task list view.
 
-### Edit a task
+### Edit a task ✅
 
 - Allow users to click on a task to enter an edit mode or provide an edit button/icon.
 - Display editable fields for the task title, description, deadline, priority, and category.
 - After making changes, provide a save button to apply the edits to the task.
 
-### Prioritize tasks
+### Prioritize tasks ✅
 
 - Implement a mechanism for users to set the priority level of each task.
 - Display priority indicators next to each task in the task list (e.g., color-coded icons or labels).
 - Allow users to sort tasks based on priority level within the task list.
 
-### Categorize tasks
+### Categorize tasks ✅
 
 - Provide an interface for users to create, and delete categories or projects.
 - Allow users to assign tasks to specific categories during task creation or editing.
@@ -65,13 +65,13 @@
 - Allow users to set reminders for tasks at specific times or intervals before the deadline.
 - Provide options for users to customize notification preferences (e.g., sound, frequency).
 
-### Search/filter tasks
+### Search/filter tasks ✅
 
 - Include a search bar or filter options in the task list interface.
 - Allow users to search for tasks using keywords present in the task title or description.
 - Implement filters based on criteria such as priority, category, or completion status.
 
-### Reorder tasks
+### Reorder tasks ✅
 
 - Enable users to drag and drop tasks within the task list to manually reorder them.
 - Provide options to sort tasks automatically based on priority, deadline, or alphabetical order.
@@ -90,7 +90,7 @@
 
 ### Import/export Tasks
 
-- Allow users to import tasks from external sources (e.g., CSV files, other task management apps).
+- Allow users to import tasks from external sources (e.g., CSV files, JSON).
 - Provide options to export task data in common file formats for backup or sharing purposes (e.g., CSV, JSON).
 
 ### Intuitive interface

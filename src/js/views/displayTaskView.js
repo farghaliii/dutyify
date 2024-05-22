@@ -43,19 +43,19 @@ class DisplayTaskView {
     // Deletion - Display the confirmation message
     if (btn.classList.contains("btn--delete-action")) {
       const confirmtionBoxEl = btn.nextElementSibling;
-      btn.classList.add("hidden");
-      confirmtionBoxEl.classList.remove("hidden");
+      btn.classList.add("hidden-animated");
+      confirmtionBoxEl.classList.remove("hidden-animated");
     }
 
     // Deletion - Canceled
     if (btn.classList.contains("btn--delete-canceled")) {
       actionsBoxEl
         .querySelector(".btn--delete-action")
-        .classList.remove("hidden");
+        .classList.remove("hidden-animated");
 
       actionsBoxEl
         .querySelector(".delete-action__confirmation")
-        .classList.add("hidden");
+        .classList.add("hidden-animated");
     }
 
     // Deletion - Confirmed so delete the task
@@ -104,7 +104,7 @@ class DisplayTaskView {
           </div>
           <div class="task__delete-action">
             <button class="btn btn--delete-action">Delete</button>
-            <div class="delete-action__confirmation hidden">
+            <div class="delete-action__confirmation hidden-animated">
                 <p>You'll delete this task! Are you sure?</p>
                 <button class="btn btn--delete-confirmed">Yes</button>
                 <button class="btn btn--delete-canceled">No</button>
